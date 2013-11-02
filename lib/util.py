@@ -1,4 +1,28 @@
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os
+from const import *
+
+# Returns the winner of the two in a RPS contest
+def victor( m1, m2 ):
+    if m1 == m2:
+        return m1
+    
+    if m1 == moves.ROCK and m2 == moves.PAPER:
+        return m2
+    if m1 == moves.ROCK and m2 == moves.SCISSORS:
+        return m1
+    
+    if m1 == moves.PAPER and m2 == moves.ROCK:
+        return m1
+    if m1 == moves.PAPER and m2 == moves.SCISSORS:
+        return m2
+    
+    if m1 == moves.SCISSORS and m2 == moves.PAPER:
+        return m1
+    if m1 == moves.SCISSORS and m2 == moves.ROCK:
+        return m2
+        
+    raise TypeError("Somehow I missed a combination.")
+    return None
 
 ######################################
 # RNG-related functions
