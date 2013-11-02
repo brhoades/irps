@@ -7,7 +7,6 @@ import util, random
 from const import *
 
 class agent:
-    
     def __init__( self, cfg, type ):
         #Store our individual payoffs for each sequence, ordered
         self.payoffs = []
@@ -18,29 +17,71 @@ class agent:
         #Store their moves on each sequence, ordered
         self.tmoves = []
         
-        for i in range(0,int(cfg[AGENT][MEM])):
+        self.mem = int(cfg[AGENT][MEM])
+        self.mdepth = int(cfg[AGENT][DEPTH])
+        
+        for i in range(self.mem):
             self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
             self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
         
         #Our depth
         self.depth = 0
         
+        #Nodes by depth
+        self.nbd = [ [] for i in range(self.mdepth) ]
+        
         #Root node
         self.root = None
         
+        #leaf initialization
         if type == "evolve":
-            while self.depth < int(cfg[AGENT][DEPTH]):
-                #Do grow initialization here
-                break
+            self.root = self.randomNodule( None )
+
+            if not self.root.isLeaf:
+                self.populate( self.root )
+                
         elif type == "lastwin":
-            #Drop a simple tree here that always chooses last win or random
+            #Drop a simple tree here that always chooses last win
             return
         
-    def addNodule( self, parent, type, op=None ):
-        return
-        
-class node:
+    def __str__( self ):
+        ret = ""
+        return ret
     
+    # Pass a parent and we'll randomly add a terminal/node or intelligently end the tree
+    def randomNodule( self, parent ):
+        #True? We're going to be a terminal
+        if util.flip( ) or self.root == None or parent.depth == self.mdepth-1:
+            return node( self, parent, self.randomTerm( ), True )
+        else:
+            return node( self, parent, None, False )
+        
+    def randomTerm( self ):
+        term = [ ]
+        
+        if util.flip( ):
+            term.append("O")
+        else:
+            term.append("P")
+        
+        term.append(random.randint(0,self.mem))
+        
+        return term
+    
+    # Pass the node whose children we're populating and, depending on that node's depth, we'll populate kids for it
+    #   recursively
+    def populate( self, nod ):
+        if node.isLeaf:
+            raise TypeError("Populate called on leaf")
+        
+        nod.children.append( self.randomNodule( nod ) )
+        nod.children.append( self.randomNodule( nod ) )
+        
+        for n in nod.children:
+            if n.isLeaf:
+                self.populate( n )
+       
+class node:
     def __init__( self, agent, parent, op, leaf ):
         #our agent
         self.agent = agent
@@ -53,10 +94,29 @@ class node:
         
         # our operation. If we're a leaf this is a list with P/O on the first spot, and a number following. 
         # If this is a node it's a function ref
-        self.operator = None
+        if op == None and not leaf:
+            self.operator = self.randomOp( )
+        else:
+            self.operator = op
         
         #our two children
         self.children = []
+        
+        #How deep we are
+        self.depth = 0
+        up = self
+        while up != self.agent.root:
+            up = up.parent
+            self.depth += 1
+        
+        self.agent.nbd[self.depth].append(self)
+    
+    def randomOp( self ):
+        rint = random.randint(0,1)
+        if rint == 0:
+            return self.winner
+        else:
+            return self.loser
     
     def winner( self ):
         cres = []
