@@ -20,6 +20,7 @@ class agent:
         
         for i in range(0,int(cfg[AGENT][MEM])):
             mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
+            tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
         
         #Our depth
         depth = 0
