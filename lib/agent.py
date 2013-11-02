@@ -121,6 +121,7 @@ class node:
                     
         self.agent.nbd[self.depth].append(self)
     
+    # Gives us a random operator reference
     def randomOp( self ):
         rint = random.randint(0,2)
         if rint == 0:
@@ -172,8 +173,11 @@ class node:
             
         return cres
       
-        
+    # "Looks up" in our memory what our operator looks for, when we are a leaf
     def lookup( self, op ):
+        if not nod.isLeaf:
+            raise TypeError("Lookup called on a node")
+        
         type, index = op
         lu = None
         
