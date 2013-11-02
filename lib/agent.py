@@ -36,6 +36,7 @@ class agent:
         #leaf initialization
         if type == "evolve":
             self.root = self.randomNodule( None )
+            print("Root made!")
 
             if not self.root.isLeaf:
                 self.populate( self.root )
@@ -46,12 +47,20 @@ class agent:
         
     def __str__( self ):
         ret = ""
+        
+        for nl in self.nbd:
+            for n in nl:
+                if n.isLeaf:
+                    ret += ''.join([n.operator[0], str(n.operator[1]), "   "])
+                else:
+                    ret += ''.join([n.operator.__name__, "   "])
+            ret += "\n"
         return ret
     
     # Pass a parent and we'll randomly add a terminal/node or intelligently end the tree
     def randomNodule( self, parent ):
         #True? We're going to be a terminal
-        if util.flip( ) or self.root == None or parent.depth == self.mdepth-1:
+        if util.flip( ) or self.mdepth == 0 or ( parent != None and parent.depth == self.mdepth-2 ):
             return node( self, parent, self.randomTerm( ), True )
         else:
             return node( self, parent, None, False )
@@ -71,14 +80,14 @@ class agent:
     # Pass the node whose children we're populating and, depending on that node's depth, we'll populate kids for it
     #   recursively
     def populate( self, nod ):
-        if node.isLeaf:
+        if nod.isLeaf:
             raise TypeError("Populate called on leaf")
         
         nod.children.append( self.randomNodule( nod ) )
         nod.children.append( self.randomNodule( nod ) )
         
         for n in nod.children:
-            if n.isLeaf:
+            if not n.isLeaf:
                 self.populate( n )
        
 class node:
@@ -105,9 +114,12 @@ class node:
         #How deep we are
         self.depth = 0
         up = self
-        while up != self.agent.root:
+
+        while up != self.agent.root and not self.agent.root == None:
             up = up.parent
             self.depth += 1
+            
+        print(self.depth)
         
         self.agent.nbd[self.depth].append(self)
     
