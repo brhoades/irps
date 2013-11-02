@@ -19,6 +19,7 @@ class agent:
         
         self.mem = int(cfg[AGENT][MEM])
         self.mdepth = int(cfg[AGENT][DEPTH])
+        self.tprob = float(cfg[INIT][IPROB])
         
         for i in range(self.mem):
             self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
@@ -60,14 +61,13 @@ class agent:
     # Pass a parent and we'll randomly add a terminal/node or intelligently end the tree
     def randomNodule( self, parent ):
         #True? We're going to be a terminal
-        if util.flip( ) or self.mdepth == 0 or ( parent != None and parent.depth == self.mdepth-2 ):
+        if util.roll(self.tprob) or self.mdepth == 0 or ( parent != None and parent.depth == self.mdepth-2 ):
             return node( self, parent, self.randomTerm( ), True )
         else:
             return node( self, parent, None, False )
         
     def randomTerm( self ):
-        term = [ ]
-        
+        term = []
         if util.flip( ):
             term.append("O")
         else:

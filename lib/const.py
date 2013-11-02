@@ -5,6 +5,7 @@
 #main config sections
 AGENT = "agent"
 MAIN = "main"
+INIT = "init"
 
 #indicies
 DEPTH = "d"
@@ -14,6 +15,10 @@ MEM = "k"
 SEED = "seed"
 SEQRUNS = "l"
 RUNS = "runs"
+
+#init
+METHOD = "method"
+IPROB = "prob"
 
 class moves:
     MINMOVE=0
