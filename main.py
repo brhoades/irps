@@ -26,7 +26,7 @@ def main():
     
     #lg = log( cfg, cseed, gcfg( ) )
     #best = False
-    for i in range( int(cfg[MAIN][RUNS]) ):
+    for i in range( 0, int(cfg[MAIN][RUNS]) ):
         print( "Run:", str(i+1) )
         eagt=agent(cfg, type="evolve")        
         print( eagt )

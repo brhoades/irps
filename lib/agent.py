@@ -118,45 +118,60 @@ class node:
         while up != self.agent.root and not self.agent.root == None:
             up = up.parent
             self.depth += 1
-            
-        print(self.depth)
-        
+                    
         self.agent.nbd[self.depth].append(self)
     
     def randomOp( self ):
-        rint = random.randint(0,1)
+        rint = random.randint(0,2)
         if rint == 0:
             return self.winner
-        else:
+        elif rint == 1:
             return self.loser
+        elif rint == 2:
+            return self.other
     
+    # Winner returns the winner constant between our children
     def winner( self ):
-        cres = []
-        
-        for i in range(2):
-            #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
-            if self.children[i].isLeaf:
-                cres.append( self.lookup( self.children[i].operator ) )
-            else:
-                cres.append( self.children[i]( ) )
+        cres = self.getCRes( )
         
         return util.victor(cres[0], cres[1])
-        
+    
+    # Loser returns the losing constant between our children
     def loser( self ):
-        cres = []
-        
-        for i in range(2):
-            #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
-            if self.children[i].isLeaf:
-                cres.append( self.lookup( self.children[i].operator ) )
-            else:
-                cres.append( self.children[i]( ) )
-        
+        cres = self.getCRes( )
+
         #return the LOSER, so the one that's not the victor
         if util.victor(cres[0], cres[1]) == cres[0]:
             return cres[1]
         else:
             return cres[0]
+        
+    # Other returns the OTHER option between the two children. If there's more
+    #   than one other, it returns a random one of the two.
+    def other( self ):
+        cres = self.getCRes( )
+        
+        ops = [moves.ROCK, moves.SCISSORS, moves.PAPER]
+        for c in cres:
+            if c in ops:
+                ops.remove(c)
+        
+        if len(ops) == 1:
+            return ops[0]
+        else:
+            return random.sample(ops)
+        
+    # Gets the resulting rock, paper, or scissors results from all children        
+    def getCRes( self ):
+        cres = []
+        #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
+        if self.children[i].isLeaf:
+            cres.append( self.lookup( self.children[i].operator ) )
+        else:
+            cres.append( self.children[i]( ) )
+            
+        return cres
+      
         
     def lookup( self, op ):
         type, index = op
