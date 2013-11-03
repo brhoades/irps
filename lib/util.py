@@ -1,6 +1,9 @@
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
 from const import *
 
+#FIXME: REmove this
+import pprint
+
 # Returns the winner of the two in a RPS contest
 def victor( m1, m2 ):
     #Need to do this due to some type issues with reading the CSV
@@ -25,7 +28,6 @@ def victor( m1, m2 ):
     if m1 == moves.SCISSORS and m2 == moves.ROCK:
         return m2
      
-    print( moves.SCISSORS, moves.ROCK, moves.PAPER, "and:", m1, m2 )
     raise TypeError( "Somehow I missed a combination.", tauriTran( m1 ), tauriTran( m2 ) )
 
 #Load our CSV into memory, parse it into our format, and then return a list
@@ -36,17 +38,22 @@ def loadCSV( fn ):
         ln = 0
         for line in fh:
             if ln == 0:
-                loadCSV.logar = [ '' for i in range(0, (3 ** (int(line)*2)+1)) ]
+                loadCSV.logar = []
+                #Make us a k*2 dimensional array w/ a single element at the end
+                # for b-treeish lookups.
+                nlist( loadCSV.logar, int(line)*2, 3, True )
                 ln += 1
                 continue
             if line == '\n':
                 continue
+            
             rl = line.split(',')
             for c in range(0,len(rl)):
-                rl[c] = str( tauriTran( rl[c] ) )
+                rl[c] = int( tauriTran( rl[c] ) )
             
-            loadCSV.logar[ln] = ''.join(rl)
-            ln += 1
+            #At the values from rl[0] to rl[last-1] set rl[last]
+            recurlook( loadCSV.logar, rl[:-1], rl[len(rl)-1] )
+
     return loadCSV.logar
         
 #Does a TRANslation from TAURItz's format
@@ -76,29 +83,46 @@ def csvop( csvdata, tmov, mmove ):
     #P1, O1, P2, O2, ...Pn, On, Outcome
     #my moves, player, go before the opponent's
     for i in range(0,len(mmove)*2, 2):
-        hist[i] = str(mmove[hi])
+        hist[i] = mmove[hi]
         hi += 1
     
     hi = 0
     for i in range(1,len(tmov)*2, 2):
-        hist[i] = str(tmov[hi])
+        hist[i] = tmov[hi]
         hi += 1
         
     if len(hist) != len(tmov)*2:
         raise TypeError("Math problem in history calculation!")
     
-    #splce this to only have the data that's relevant in st
+    #splice this to only have the data that's relevant in st
     hist[(len(csvdata[0])-1):]
     
-    #################Logic it up and do some of that fancy stuff
     #Look for our string in csvdata
-    #FIXME: Also, this could be a b-tree
-    hstr = ''.join(hist)
-    for st in csvdata:
-        #Search for everything except the last item
-        if st[:-1].find(hstr) != -1:
-            return st[len(st)-1]
-    raise TypeError("Didn't find a sequence to match us!")
+    return recurlook(csvdata, hist)
+
+#Recursively pops values off lv and looks at that spot in l.
+#  If set != None, it sets that index to set.
+def recurlook( l, lv, st=None ):
+    if len(lv) > 1:
+        return recurlook(l[lv.pop()], lv, st)
+    elif st != None:
+        l[lv.pop()] = st
+        return st
+    
+    return l[lv.pop()]
+    
+#Create a n-dimensional list that's x wide
+#  endel adds a value onto the end automatically
+def nlist( l, n, x=3, endel=False ):
+    n -= 1
+    if n >= 0:
+        for i in range(0,x):
+            l.append([])
+            nlist( l[i], n, x )
+    elif endel:
+        l.append(-1)
+        
+    return l
     
 ######################################
 # RNG-related functions
