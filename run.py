@@ -11,15 +11,13 @@ from agent import agent
 from const import *
 from util import *
 
-def run( cfg, i, lg ):
+def run( cfg, i, lg, olog ):
     #read some cfg stuff in and convert it. Also init various caches.
     seqs = int(cfg[MAIN][SEQRUNS])
     otype = cfg[MAIN][OPP]
     fitevals = int(cfg[MAIN][FITEVALS])
-    olog = None
     print( "Run:", i )
-    if otype != "0":
-        olog = loadCSV(otype)
+
         
     #running best stuff
     best = None
