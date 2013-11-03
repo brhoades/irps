@@ -1,0 +1,25 @@
+Billy Rhoades (12352623) <bjrq48@mst.edu>
+Evolutionary Computation
+Class: CS348 Assignment 2a
+
+This program has been throughly tested on Linux on both Python 3.2 and Python 3.3.
+
+****It is known not to work on Python 2.6 and Python 2.7.****
+
+Depending on your installation,you may need to install the configparser module for 
+python. In Debian and Ubuntu, this package is named "python-configparser". 
+Windows users may need to select this module during the installation of Python.
+
+You may load any of the preconfigured problem sets with the -c command line option.
+They can be found in the cfgs directory.
+
+Examples:
+
+default.cfg:
+    Contains all necessary documentation on every different config option and what
+    it does. Has a short sample run for debugging.
+
+Example:
+    python3 main.py -c cfg/default.cfg
+
+Each config is named appropriately for the run they were used for and are located in cfg/
