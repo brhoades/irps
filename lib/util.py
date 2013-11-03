@@ -41,6 +41,7 @@ def loadCSV( fn ):
         for line in fh:
             if ln == 0:
                 loadCSV.logar = []
+                loadCSV.k = int(line)
                 #Make us a k*2 dimensional array w/ a single element at the end
                 # for b-treeish lookups.
                 nlist( loadCSV.logar, int(line)*2, 3, True )
@@ -97,7 +98,8 @@ def csvop( csvdata, tmov, mmove ):
         raise TypeError("Math problem in history calculation!")
     
     #splice this to only have the data that's relevant in st
-    hist[(len(csvdata[0])-1):]
+    #FIXME: This is awful
+    hist = hist[(loadCSV.k*2):]
     
     #Look for our string in csvdata
     return recurlook(csvdata, hist)
