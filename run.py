@@ -20,7 +20,9 @@ def run( cfg, i ):
     print( "Run:", i )
     if otype != "0":
         olog = loadCSV(otype)
-    
+        
+    #running best stuff
+    best = None
     #Fitness counter
     fitcnt = 0
     
@@ -45,5 +47,10 @@ def run( cfg, i ):
             agnt.upres( gpres, ores )
         
         #Fitness check
-        fit = agnt.fitness( )
+        agnt.fitness( )
         fitcnt += 1
+        
+        if best == None or agnt.fit > best.fit:
+            best = agnt
+        
+    return best

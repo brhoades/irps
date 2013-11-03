@@ -24,6 +24,8 @@ class agent:
         self.tprob = float(cfg[INIT][IPROB])
         self.meth = cfg[INIT][METHOD]
         
+        self.fit = 0
+        
         ################### Process stupid table ###################
         tpv = cfg[AGENT][PAYOFF].split(',')
         self.pofftable = [[] for i in range(moves.MINMOVE,moves.MAXMOVE+1)]
@@ -143,7 +145,7 @@ class agent:
         sum = 0
         for i in self.payoffs:
             sum += i
-        return sum/len(self.payoffs)
+        self.fit = sum/len(self.payoffs)
        
 class node:
     def __init__( self, agent, parent, op, leaf ):
