@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+#Author: Billy J Rhoades <bjrq48@mst.edu>
+#Class: CS348 Assignment 2a
+#Our miscellaneous functions that don't depend on any specific classes.
+
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
 from const import *
-
-#FIXME: REmove this
-import pprint
 
 # Returns the winner of the two in a RPS contest
 def victor( m1, m2 ):
