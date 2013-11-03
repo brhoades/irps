@@ -1,8 +1,12 @@
-import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os
+import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
 from const import *
 
 # Returns the winner of the two in a RPS contest
 def victor( m1, m2 ):
+    #Need to do this due to some type issues with reading the CSV
+    m1 = int(m1)
+    m2 = int(m2)
+    
     if m1 == m2:
         return m1
     
@@ -20,10 +24,86 @@ def victor( m1, m2 ):
         return m1
     if m1 == moves.SCISSORS and m2 == moves.ROCK:
         return m2
-        
-    raise TypeError("Somehow I missed a combination.")
-    return None
+     
+    print( moves.SCISSORS, moves.ROCK, moves.PAPER, "and:", m1, m2 )
+    raise TypeError( "Somehow I missed a combination.", tauriTran( m1 ), tauriTran( m2 ) )
 
+# Returns the payoff table value
+def payoff( m1, m2 ):
+    if m1 == m2:
+        return 0
+    elif victor( m1, m2 ):
+        return 1
+    else:
+        return -1
+
+#Load our CSV into memory, parse it into our format, and then return a list
+#This CSV takes ages to parse, made it a "static" variable for huge time savings
+def loadCSV( fn ):
+    if not hasattr( loadCSV, "logar" ):        
+        fh = open( fn, 'r' )
+        ln = 0
+        for line in fh:
+            if ln == 0:
+                loadCSV.logar = [ '' for i in range(0, (3 ** (int(line)*2)+1)) ]
+                ln += 1
+                continue
+            if line == '\n':
+                continue
+            rl = line.split(',')
+            for c in range(0,len(rl)):
+                rl[c] = str( tauriTran( rl[c] ) )
+            
+            loadCSV.logar[ln] = ''.join(rl)
+            ln += 1
+    return loadCSV.logar
+        
+#Does a TRANslation from TAURItz's format
+def tauriTran( char ):
+    #We're making this static to save time when parsing this massive file
+    if not hasattr( tauriTran, "table" ):
+        tauriTran.table = [ i for i in range(0,3) ]
+        tauriTran.table[moves.PAPER] = "P"
+        tauriTran.table[moves.SCISSORS] = "S"
+        tauriTran.table[moves.ROCK] = "R"
+    
+    #We translate both ways, so try...
+    try:
+        float(char)
+    except ValueError:
+        return tauriTran.table.index(char.rstrip('\n'))
+    else:
+        return tauriTran.table[int(char)]
+    
+
+#Decide what the csv tells us to do
+def csvop( csvdata, tmov, mmove ):
+    ##################interlace tmov and mmov so it looks like Tauritz's thing
+    hist = [ -5 for i in range(0,len(mmove)*2) ]
+    
+    hi = 0 
+    #P1, O1, P2, O2, ...Pn, On, Outcome
+    #my moves, player, go before the opponent's
+    for i in range(0,len(mmove)*2, 2):
+        hist[i] = str(mmove[hi])
+        hi += 1
+    
+    hi = 0
+    for i in range(1,len(tmov)*2, 2):
+        hist[i] = str(tmov[hi])
+        hi += 1
+        
+    if len(hist) != len(tmov)*2:
+        raise TypeError("Math problem in history calculation!")
+    
+    #################Logic it up and do some of that fancy stuff
+    #Look for our string in csvdata
+    #FIXME: Also, this could be a b-tree
+    hstr = ''.join(hist)
+    for st in csvdata:
+        if st.find(hstr) != -1:
+            return st[len(st)-1]
+    
 ######################################
 # RNG-related functions
 ######################################
@@ -67,7 +147,7 @@ def readConfig( fn ):
 def gcfg( ):
     parser = argparse.ArgumentParser(description='CS348 FS2013 Assignment 2')
     parser.add_argument('-c', type=str,
-                        help='Specifies a configuration file (default: cfgs/default.cfg)',
+                        help='Specifies a configuration file (default: cfg/default.cfg)',
     default="cfg/default.cfg")
     
     args = parser.parse_args()

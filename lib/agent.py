@@ -18,6 +18,8 @@ class agent:
         self.tmoves = []
         
         self.mem = int(cfg[AGENT][MEM])
+        if self.mem < 4:
+            self.mem = 4
         self.mdepth = int(cfg[AGENT][DEPTH])
         self.tprob = float(cfg[INIT][IPROB])
         self.meth = cfg[INIT][METHOD]
@@ -41,11 +43,11 @@ class agent:
                 
         elif type == "lastwin":
             #Drop a simple tree here that always chooses last winner
-            #FIXME: Is memory a FIFO or FILO?
+            #Our memory is a stack where [0] is the latest
             self.root = node( self, None, None, False )
             self.root.operator = self.root.winner
-            self.root.children.append( node( self, self.root, ["O", 1], False ) )
-            self.root.children.append( node( self, self.root, ["P", 1], False ) )
+            self.root.children.append( node( self, self.root, ["O", 0], False ) )
+            self.root.children.append( node( self, self.root, ["P", 0], False ) )
         
     def __str__( self ):
         ret = ""
@@ -91,13 +93,30 @@ class agent:
             if not n.isLeaf:
                 self.populate( n )
     
-    #Run our GP and return our choice. We do our own memory except for the payoff / tmoves, which is done by
-    #  upres.
+    # Run our GP and return our choice. We do our own memory except for the payoff / tmoves, which is done by
+    #   upres.
     def run( self ):
+        res = -2
         if self.root.isLeaf:
-            return self.root.lookup( )
+            res=self.root.lookup( )
         else:
-            return self.root.operator( )
+            res=self.root.operator( )
+            
+        #Update our memory
+        #Our memory is a LIFO where [0] is the latest and [k-1] is the oldest, k turns ago
+        del self.mymoves[self.mem-1]
+        self.mymoves.insert(0, res)
+        
+        return res
+    
+    # Update our memory for them and our payload
+    def upres( self, res, opp ):
+        self.payoffs.append(util.payoff( res, opp ))
+        
+        #Update our memory for them
+        del self.tmoves[self.mem-1]
+        self.tmoves.insert(0, opp)
+        
        
 class node:
     def __init__( self, agent, parent, op, leaf ):
