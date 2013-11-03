@@ -291,3 +291,89 @@ class log:
             d = os.path.abspath(me)
             if not os.path.exists(d):
                 os.makedirs(d)   
+                
+#####
+#UI Functions
+#####
+# Backspaces over previous stuff and padds the end of our line to cover it up
+def delprn( new, level=2, overwrite=True ):
+    if not hasattr(delprn, "old"):
+         delprn.old = []
+         for i in range(0,5):
+            delprn.old.append("")
+    if new == delprn.old[level]:
+        return
+        
+    cnt = 0
+    for i in range(level, len(delprn.old)):
+        cnt += len(delprn.old[i])
+        delprn.old[i] = ""
+    print('\r', end='')
+    sys.stdout.write("\033[K")
+    for i in range(0, level):
+        print(delprn.old[i], end='')
+    print(new, end='')
+    sys.stdout.flush( )
+    delprn.old[level] = new
+    
+# Rounds a number off and gives a string
+def perStr( dec, ceil=True, round=True ):
+    rnd = 100
+    if not round:
+        rnd = 1
+    if ceil:
+        return str(math.ceil(dec*rnd))
+    else:
+        return str(math.floor(dec*rnd))
+
+# Mutates a square if this returns >= 1  
+def mutateSq( mu, sigma ):
+    return( math.floor( math.fabs( random.gauss( mu, sigma ) ) ) )
+
+# Renders a header depending on options
+def renderHead( cfg ):
+    print(''.join(["Run #/",cfg[MAIN][RUNS]]), end='')
+    if int(cfg[MAIN][RUNS]) < 100:
+        print('\t', end='') 
+    print(''.join(["Run %", "\t"]), end='')
+    
+    print(''.join(["Fit #/", cfg[MAIN][FITEVALS], "\t" "Fit %", "\t"]), end='')
+    
+    print("Avg Fit\tBest Fit\tStatus" )
+    
+def pad(num, pad):
+    if pad == '0':
+        return str(num)
+    inum = str(num)
+    return inum.rjust(math.floor(math.log(int(pad), 10)+1), '0')
+
+#Prints our basic string out on the screen
+def prnBase( cfg, runn, fitevals, avgfit, bestfit, status ):
+    evals="~"
+    avg="~"
+    best="~"
+    if runn != -1:
+        avg = round( avgfit, 4 )
+        evals = fitevals
+        best = round( bestfit, 4 )
+    out = ""
+    if int(cfg[MAIN][RUNS]) >= 10:
+        out += "\t"
+    out += str(runn+1)
+    out += "\t"
+    out += perStr( runn/int(cfg[MAIN][RUNS]) )
+    out += "\t"
+    out += pad(fitevals, cfg[MAIN][FITEVALS])
+    out += "\t"
+    if math.log(int(cfg[MAIN][FITEVALS]), 10) >= 2:
+        out += "\t"
+    out += perStr( fitevals/int(cfg[MAIN][FITEVALS]) )
+    out += "\t"
+    out += str(avg)
+    out += "\t"
+    out += str(best)
+    out += "\t\t"
+    out += status
+    
+    delprn(out, 0)
+    

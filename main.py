@@ -31,6 +31,7 @@ def main():
     
     lg = util.log( cfg, cseed, util.gcfg( ) )
     best = None
+    util.renderHead( cfg )
     for i in range( 0, int(cfg[MAIN][RUNS]) ):
         lg.sep( i )
         eagt=run(cfg, i, lg, olog)
@@ -39,6 +40,8 @@ def main():
         lg.spacer( )
     lg.best(best)
     lg.wrapUp(best)
+    
+    print("\n")
 
 if __name__ == '__main__':
     main()

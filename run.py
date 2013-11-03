@@ -16,11 +16,11 @@ def run( cfg, i, lg, olog ):
     seqs = int(cfg[MAIN][SEQRUNS])
     otype = cfg[MAIN][OPP]
     fitevals = int(cfg[MAIN][FITEVALS])
-    print( "Run:", i )
-
         
     #running best stuff
     best = None
+    #Running average
+    avg = []
     #Fitness counter
     fitcnt = 0
     
@@ -47,9 +47,16 @@ def run( cfg, i, lg, olog ):
         #Fitness check
         agnt.fitness( )
         fitcnt += 1
+        avg.append(agnt.fit)
         
         if best == None or agnt.fit > best.fit:
             best = agnt
             lg.entry( fitcnt, agnt)
+        
+        tavg = 0
+        for ind in avg:
+            tavg += ind
+        tavg /= len(avg)
+        prnBase( cfg, i, fitevals, tavg, best.fit, "Running" )
         
     return best
