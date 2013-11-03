@@ -57,6 +57,6 @@ def run( cfg, i, lg, olog ):
         for ind in avg:
             tavg += ind
         tavg /= len(avg)
-        prnBase( cfg, i, fitevals, tavg, best.fit, "Running" )
+        prnBase( cfg, i, fitcnt, tavg, best.fit, "Running" )
         
     return best

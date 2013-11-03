@@ -357,9 +357,9 @@ def prnBase( cfg, runn, fitevals, avgfit, bestfit, status ):
         evals = fitevals
         best = round( bestfit, 4 )
     out = ""
+    out += str(runn+1)
     if int(cfg[MAIN][RUNS]) >= 10:
         out += "\t"
-    out += str(runn+1)
     out += "\t"
     out += perStr( runn/int(cfg[MAIN][RUNS]) )
     out += "\t"
