@@ -99,8 +99,9 @@ def csvop( csvdata, tmov, mmove ):
     
     #splice this to only have the data that's relevant in st
     #FIXME: This is awful
-    hist = hist[(loadCSV.k*2):]
-    
+    if len(hist) > loadCSV.k*2:
+        hist = hist[(loadCSV.k*2):]
+
     #Look for our string in csvdata
     return recurlook(csvdata, hist)
 
