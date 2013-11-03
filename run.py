@@ -15,4 +15,4 @@ def run( cfg, i ):
     agnt = agent(cfg, type="evolve")        
     
     for seqn in range(0,seqs):
-        print( agnt.run( ) )
+        agnt.run( )

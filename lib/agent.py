@@ -95,7 +95,7 @@ class agent:
     #  upres.
     def run( self ):
         if self.root.isLeaf:
-            return self.root.lookup( self.root.operator )
+            return self.root.lookup( )
         else:
             return self.root.operator( )
        
