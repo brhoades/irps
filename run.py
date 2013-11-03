@@ -11,7 +11,7 @@ from agent import agent
 from const import *
 from util import *
 
-def run( cfg, i ):
+def run( cfg, i, lg ):
     #read some cfg stuff in and convert it. Also init various caches.
     seqs = int(cfg[MAIN][SEQRUNS])
     otype = cfg[MAIN][OPP]
@@ -52,5 +52,6 @@ def run( cfg, i ):
         
         if best == None or agnt.fit > best.fit:
             best = agnt
+            lg.entry( fitcnt, agnt)
         
     return best

@@ -156,17 +156,15 @@ class log:
         self.fullRes = self.rfn
         self.fullSol = self.sfn
         
+        print("Writing to:", self.rfn, "and", self.sfn, "you have 3 seconds to cancel.")
+        time.sleep(3)
+        
         self.res = open( self.rfn, 'w' )
         self.sol = open( self.sfn, 'w' )
         res = self.res
         sol = self.sol
         
         res.write( ''.join(["Result Log\n", "Config File: ", cfgf, "\n"]) )
-        if( fcfg[GRAPH][GENERATE] != 'True' ):
-            res.write( ''.join(["Puzzle File: ", fcfg[GRAPH][GENERATE], "\n" ]) )
-        else:
-            res.write( ''.join(["Randomly Generating Graph(s)\n"]) )
-            
         res.write( ''.join(['Seed: ', str(gseed), '\n' ]) )
         
         #Fancy git output
@@ -176,18 +174,19 @@ class log:
             output = re.sub( r'\\n', '\n', output )
             output = re.sub( r'(b\'|\'$)', '', output )
             self.res.write( output )
-        
-        #Map generation parameters
-        if fcfg[GRAPH][GENERATE] == 'True':
-            self.cfgStr( fcfg[GRAPH], "Map generation parameters:", [GRAPH] )
             
-        self.cfgStr( fcfg[POP], "Population Parameters:" )        
-
+        self.cfgStr( fcfg[MAIN], "Main Parameters:" )        
+        self.cfgStr( fcfg[AGENT], "Agent Parameters:" )      
+        self.cfgStr( fcfg[INIT], "Initialization Parameters:" )      
         
     # Flushes our logs to a file
     def flush( self ):
         self.sol.flush( )
         self.res.flush( )
+                
+    # Outputs our serialized best to a fileinput
+    def best( self, best ):
+        self.sol.write( best.serialize( ) )
                 
     # Prints parameters for a long config sequence, beautifully
     def cfgStr( self, cfg, title, skip=[] ):
@@ -202,12 +201,15 @@ class log:
 
     # Seperates our result log file with pretty run numbers.
     def sep( self, run ):
-        self.res.flush( )
         self.res.write( ''.join( [ "\n", "Run ", str(run+1), "\n" ] ) )
+        self.res.flush( )
+    
+    def entry( self, evals, nbest ):
+        self.res.write( ''.join( [ str(evals), "\t", str(nbest.fit), "\n" ] ) )
     
     # Our generational best
     def spacer( self ):
-        self.res.write( "=SPACER=\n\n" )
+        self.res.write( "=SPACER=\n" )
         
     # Do our initial variable sub
     def processDirs( self ):
@@ -245,9 +247,10 @@ class log:
         com = re.sub( r'(b\'|\'$|\?|\\n)', '', com)
         dir = re.sub( r'\%cm', com, dir )
         #ccfg = re.sub( r'\.cfg', '', self.cfgf )
+        #ccfg = re.sub( r'cfg\\', '', ccfg )
         #dir = re.sub( r'\%cfg', ccfg, dir )
         if best != None:
-            dir = re.sub(r'\%bf', str(round(best.fitTable.data[0][0].oldFitness(),3)), dir )
+            dir = re.sub(r'\%bf', str(round(best.fit,3)), dir )
         return dir
     
     # Create directories and do substutitions on variabes (currently only %c)

@@ -6,6 +6,7 @@
 AGENT = "agent"
 MAIN = "main"
 INIT = "init"
+LOG = "log"
 
 #agent
 DEPTH = "d"
@@ -25,6 +26,11 @@ IPROB = "prob"
 
 GROW = "grow"
 FULL = "full"
+
+#log
+GIT_LOG_HEADERS = "logh"
+RESULT_LOG_FILE = "result"
+SOLUTION_LOG_FILE = "solution"
 
 class moves:
     MINMOVE=0

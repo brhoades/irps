@@ -24,13 +24,16 @@ def main():
     
     random.seed(cseed)
     
-    #lg = log( cfg, cseed, gcfg( ) )
-    #best = False
+    lg = util.log( cfg, cseed, util.gcfg( ) )
+    best = None
     for i in range( 0, int(cfg[MAIN][RUNS]) ):
-        eagt=run(cfg, i)
-        
-    #lg.best(best)
-    #lg.wrapUp(best)
+        lg.sep( i )
+        eagt=run(cfg, i, lg)
+        if best == None or eagt.fit > best.fit:
+            best = eagt
+        lg.spacer( )
+    lg.best(best)
+    lg.wrapUp(best)
 
 if __name__ == '__main__':
     main()

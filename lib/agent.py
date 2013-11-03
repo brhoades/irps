@@ -146,7 +146,26 @@ class agent:
         for i in self.payoffs:
             sum += i
         self.fit = sum/len(self.payoffs)
-       
+        
+    # Return our structure in preorder
+    def serialize( self ):
+        return self.preorder( self.root )
+
+    def preorder( self, cur ):
+        ret = ""
+        
+        if cur.isLeaf:
+            ret += ''.join([cur.operator[0], str(cur.operator[1]), " "])
+        else:
+            ret += ''.join([cur.operator.__name__, " "])
+        
+        if len(cur.children) > 0:
+            ret += self.preorder(cur.children[0])
+            ret += self.preorder(cur.children[1])
+        
+        return ret
+                
+    
 class node:
     def __init__( self, agent, parent, op, leaf ):
         #our agent
@@ -251,7 +270,7 @@ class node:
     
         if index > len(lu):
             raise TypeError("Somehow ended up with a index above k")
-        
+
         return lu[index]
     
         
