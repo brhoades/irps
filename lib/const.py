@@ -7,15 +7,17 @@ AGENT = "agent"
 MAIN = "main"
 INIT = "init"
 
-#indicies
+#agent
 DEPTH = "d"
 MEM = "k"
+PAYOFF = "payoff"
 
 #main
 SEED = "seed"
 SEQRUNS = "l"
 RUNS = "runs"
 OPP = "opp"
+FITEVALS="fitevals"
 
 #init
 METHOD = "method"

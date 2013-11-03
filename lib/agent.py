@@ -24,6 +24,27 @@ class agent:
         self.tprob = float(cfg[INIT][IPROB])
         self.meth = cfg[INIT][METHOD]
         
+        ################### Process stupid table ###################
+        tpv = cfg[AGENT][PAYOFF].split(',')
+        self.pofftable = [[] for i in range(moves.MINMOVE,moves.MAXMOVE+1)]
+        for i in range(0,len(tpv)):
+            tpv[i] = float(tpv[i])
+        #opponentplayer => res value
+        #rr,rp,rs,pr,pp,ps,sr,sp,ss
+        self.pofftable[moves.ROCK].append(tpv[0])
+        self.pofftable[moves.ROCK].append(tpv[1])
+        self.pofftable[moves.ROCK].append(tpv[2])
+
+        self.pofftable[moves.PAPER].append(tpv[3])
+        self.pofftable[moves.PAPER].append(tpv[4])
+        self.pofftable[moves.PAPER].append(tpv[5])
+        
+        self.pofftable[moves.SCISSORS].append(tpv[6])
+        self.pofftable[moves.SCISSORS].append(tpv[7])
+        self.pofftable[moves.SCISSORS].append(tpv[8])
+        ###################DONE WITH STUPID TABLE###################
+        
+        
         for i in range(self.mem):
             self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
             self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
@@ -111,12 +132,18 @@ class agent:
     
     # Update our memory for them and our payload
     def upres( self, res, opp ):
-        self.payoffs.append(util.payoff( res, opp ))
+        self.payoffs.append(self.pofftable[int(opp)][int(res)])
         
         #Update our memory for them
         del self.tmoves[self.mem-1]
         self.tmoves.insert(0, opp)
         
+    # Our fitness, just an average of our payloads
+    def fitness( self ):
+        sum = 0
+        for i in self.payoffs:
+            sum += i
+        return sum/len(self.payoffs)
        
 class node:
     def __init__( self, agent, parent, op, leaf ):

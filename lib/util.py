@@ -28,15 +28,6 @@ def victor( m1, m2 ):
     print( moves.SCISSORS, moves.ROCK, moves.PAPER, "and:", m1, m2 )
     raise TypeError( "Somehow I missed a combination.", tauriTran( m1 ), tauriTran( m2 ) )
 
-# Returns the payoff table value
-def payoff( m1, m2 ):
-    if m1 == m2:
-        return 0
-    elif victor( m1, m2 ):
-        return 1
-    else:
-        return -1
-
 #Load our CSV into memory, parse it into our format, and then return a list
 #This CSV takes ages to parse, made it a "static" variable for huge time savings
 def loadCSV( fn ):
