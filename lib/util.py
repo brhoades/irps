@@ -87,23 +87,22 @@ def csvop( csvdata, tmov, mmove ):
     if len(hist) != len(tmov)*2:
         raise TypeError("Math problem in history calculation!")
     
+    #splce this to only have the data that's relevant in st
+    hist[(len(csvdata[0])-1):]
+    
     #################Logic it up and do some of that fancy stuff
     #Look for our string in csvdata
     #FIXME: Also, this could be a b-tree
     hstr = ''.join(hist)
     for st in csvdata:
-        if st.find(hstr) != -1:
+        #Search for everything except the last item
+        if st[:-1].find(hstr) != -1:
             return st[len(st)-1]
+    raise TypeError("Didn't find a sequence to match us!")
     
 ######################################
 # RNG-related functions
 ######################################
-
-# Generates a random (!= 0) id for a graph.
-def id( ):
-    start = seed( )
-    start *= 1+random.random( )
-    return start
 
 # Generates a seed for the rng.
 def seed( ):
