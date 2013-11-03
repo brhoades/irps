@@ -20,14 +20,12 @@ class agent:
         self.mem = int(cfg[AGENT][MEM])
         self.mdepth = int(cfg[AGENT][DEPTH])
         self.tprob = float(cfg[INIT][IPROB])
+        self.meth = cfg[INIT][METHOD]
         
         for i in range(self.mem):
             self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
             self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
-        
-        #Our depth
-        self.depth = 0
-        
+
         #Nodes by depth
         self.nbd = [ [] for i in range(self.mdepth) ]
         
@@ -37,14 +35,17 @@ class agent:
         #leaf initialization
         if type == "evolve":
             self.root = self.randomNodule( None )
-            print("Root made!")
 
             if not self.root.isLeaf:
                 self.populate( self.root )
                 
         elif type == "lastwin":
-            #Drop a simple tree here that always chooses last win
-            return
+            #Drop a simple tree here that always chooses last winner
+            #FIXME: Is memory a FIFO or FILO?
+            self.root = node( self, None, None, False )
+            self.root.operator = self.root.winner
+            self.root.children.append( node( self, self.root, ["O", 1], False ) )
+            self.root.children.append( node( self, self.root, ["P", 1], False ) )
         
     def __str__( self ):
         ret = ""
@@ -61,7 +62,7 @@ class agent:
     # Pass a parent and we'll randomly add a terminal/node or intelligently end the tree
     def randomNodule( self, parent ):
         #True? We're going to be a terminal
-        if util.roll(self.tprob) or self.mdepth == 0 or ( parent != None and parent.depth == self.mdepth-2 ):
+        if ( self.meth == GROW and util.roll(self.tprob) ) or self.mdepth == 0 or ( parent != None and parent.depth == self.mdepth-2 ):
             return node( self, parent, self.randomTerm( ), True )
         else:
             return node( self, parent, None, False )
@@ -73,8 +74,8 @@ class agent:
         else:
             term.append("P")
         
-        term.append(random.randint(0,self.mem))
-        
+        #-1 here since this will reference our list blindly
+        term.append(random.randint(0,self.mem-1))
         return term
     
     # Pass the node whose children we're populating and, depending on that node's depth, we'll populate kids for it
@@ -89,6 +90,14 @@ class agent:
         for n in nod.children:
             if not n.isLeaf:
                 self.populate( n )
+    
+    #Run our GP and return our choice. We do our own memory except for the payoff / tmoves, which is done by
+    #  upres.
+    def run( self ):
+        if self.root.isLeaf:
+            return self.root.lookup( self.root.operator )
+        else:
+            return self.root.operator( )
        
 class node:
     def __init__( self, agent, parent, op, leaf ):
@@ -160,25 +169,27 @@ class node:
         if len(ops) == 1:
             return ops[0]
         else:
-            return random.sample(ops)
+            return random.sample(ops, 1)[0]
         
     # Gets the resulting rock, paper, or scissors results from all children        
     def getCRes( self ):
         cres = []
-        #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
-        if self.children[i].isLeaf:
-            cres.append( self.lookup( self.children[i].operator ) )
-        else:
-            cres.append( self.children[i]( ) )
+        
+        for i in range(0,2):
+            #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
+            if self.children[i].isLeaf:
+                cres.append( self.children[i].lookup( ) )
+            else:
+                cres.append( self.children[i].operator( ) )
             
         return cres
       
     # "Looks up" in our memory what our operator looks for, when we are a leaf
-    def lookup( self, op ):
-        if not nod.isLeaf:
+    def lookup( self ):
+        if not self.isLeaf:
             raise TypeError("Lookup called on a node")
         
-        type, index = op
+        type, index = self.operator
         lu = None
         
         #Types could be P or could be O. If it's P we look at our previous moves. If it's O we look

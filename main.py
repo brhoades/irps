@@ -27,10 +27,8 @@ def main():
     #lg = log( cfg, cseed, gcfg( ) )
     #best = False
     for i in range( 0, int(cfg[MAIN][RUNS]) ):
-        print( "Run:", str(i+1) )
-        eagt=agent(cfg, type="evolve")        
-        print( eagt )
-        run(cfg, eagt, i)
+        eagt=run(cfg, i)
+        
     #lg.best(best)
     #lg.wrapUp(best)
 

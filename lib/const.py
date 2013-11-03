@@ -15,10 +15,14 @@ MEM = "k"
 SEED = "seed"
 SEQRUNS = "l"
 RUNS = "runs"
+OPP = "opp"
 
 #init
 METHOD = "method"
 IPROB = "prob"
+
+GROW = "grow"
+FULL = "full"
 
 class moves:
     MINMOVE=0
