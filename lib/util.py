@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Author: Billy J Rhoades <bjrq48@mst.edu>
-#Class: CS348 Assignment 2a
+#Class: CS348 Assignment 2b
 #Our miscellaneous functions that don't depend on any specific classes.
 
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
@@ -50,12 +50,12 @@ def loadCSV( fn ):
             if line == '\n':
                 continue
             
-            rl = line.split(',')
-            for c in range(0,len(rl)):
-                rl[c] = int( tauriTran( rl[c] ) )
+            readlst = line.split(',')
+            for c in range(0,len(readlst)):
+                readlst[c] = int( tauriTran( readlst[c] ) )
             
             #At the values from rl[0] to rl[last-1] set rl[last]
-            recurlook( loadCSV.logar, rl[:-1], rl[len(rl)-1] )
+            recurlook( loadCSV.logar, readlst[:-1], readlst[len(readlst)-1] )
 
     return loadCSV.logar
         
@@ -78,21 +78,21 @@ def tauriTran( char ):
     
 
 #Decide what the csv tells us to do
-def csvop( csvdata, tmov, mmove ):
+def csvop( csvdata, tmov, mymove ):
     ##################interlace tmov and mmov so it looks like Tauritz's thing
-    hist = [ -5 for i in range(0,len(mmove)*2) ]
+    hist = [ -5 for i in range(0,len(mymove)*2) ]
     
-    hi = 0 
+    hsti = 0 
     #P1, O1, P2, O2, ...Pn, On, Outcome
     #my moves, player, go before the opponent's
-    for i in range(0,len(mmove)*2, 2):
-        hist[i] = mmove[hi]
-        hi += 1
+    for i in range(0,len(mymove)*2, 2):
+        hist[i] = mymove[hsti]
+        hsti += 1
     
-    hi = 0
+    hsti = 0
     for i in range(1,len(tmov)*2, 2):
-        hist[i] = tmov[hi]
-        hi += 1
+        hist[i] = tmov[hsti]
+        hsti += 1
         
     if len(hist) != len(tmov)*2:
         raise TypeError("Math problem in history calculation!")
@@ -274,9 +274,7 @@ class log:
         com = str(subprocess.check_output("git rev-parse --short HEAD", shell=True))
         com = re.sub( r'(b\'|\'$|\?|\\n)', '', com)
         dir = re.sub( r'\%cm', com, dir )
-        #ccfg = re.sub( r'\.cfg', '', self.cfgf )
-        #ccfg = re.sub( r'cfg\\', '', ccfg )
-        #dir = re.sub( r'\%cfg', ccfg, dir )
+
         if best != None:
             dir = re.sub(r'\%bf', str(round(best.fit,3)), dir )
         return dir

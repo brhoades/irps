@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Author: Billy J Rhoades <bjrq48@mst.edu>
-#Class: CS348 Assignment 2a
+#Class: CS348 Assignment 2b
 # Contains our base constants used for everything.
 
 #main config sections
@@ -23,10 +23,10 @@ FITEVALS="fitevals"
 
 #init
 METHOD = "method"
-IPROB = "prob"
 
 GROW = "grow"
 FULL = "full"
+HALFANDHALF = "halfandhalf"
 
 #log
 GIT_LOG_HEADERS = "logh"
