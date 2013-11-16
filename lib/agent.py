@@ -27,7 +27,7 @@ class agent:
             self.mem = 4
             
         self.tree = tree( self, int(cfg[AGENT][DEPTH]), self.gen.method, type )
-        
+
         self.fit = 0
         
         for i in range(self.mem):
@@ -81,7 +81,19 @@ class agent:
             sum += i
         self.fit = sum/len(self.payoffs)
         
+        self.penalize( )
+        
         self.gen.fitevals += 1
+        
+    # Penalizes our fitness based on tree size
+    def penalize( self ):
+        coeff = float(self.gen.agent[PARSIMONY_PRESSURE_COEFF])
+        
+        if self.tree.depth > self.tree.maxdepth:
+            self.fit -= (self.tree.maxdepth - self.tree.depth) * coeff
+            if self.fit < 0:
+                self.fit = 0
+            print( "Penalized!", ( self.tree.maxdepth - self.tree.depth) * coeff )
         
     # Return our structure in preorder
     def serialize( self ):

@@ -99,7 +99,6 @@ class gen:
                 delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
         return pairs
             
-            
     # Breed and mix
     def recombination( self ):
         parents = self.parentSelection( )

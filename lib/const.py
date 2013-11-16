@@ -17,6 +17,7 @@ LOG = "log"
 DEPTH = "d"
 MEM = "k"
 PAYOFF = "payoff"
+PARSIMONY_PRESSURE_COEFF = "ppcoeff"
 
 #main
 SEED = "seed"

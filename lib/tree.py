@@ -13,6 +13,8 @@ class tree:
         
         self.meth = method
         
+        #The max depth our tree should have
+        #FIXME: This should be generation-level
         self.maxdepth = maxdepth
         
         #Nodes by depth
