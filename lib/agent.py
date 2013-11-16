@@ -9,7 +9,10 @@ from tree import tree
 from const import *
 
 class agent:
-    def __init__( self, cfg, type ):
+    def __init__( self, gen, cfg, type="evolve" ):
+        #Our parent generation
+        self.gen = gen
+        
         #Store our individual payoffs for each sequence, ordered
         self.payoffs = []
         
@@ -23,31 +26,9 @@ class agent:
         if self.mem < 4:
             self.mem = 4
             
-        self.tree =  tree( self, int(cfg[AGENT][DEPTH]), cfg[INIT][METHOD], type )
+        self.tree = tree( self, int(cfg[AGENT][DEPTH]), self.gen.method, type )
         
         self.fit = 0
-        
-        ################### Process stupid table ###################
-        tpv = cfg[AGENT][PAYOFF].split(',')
-        #Pay OFF TABLE
-        self.pofftable = [[] for i in range(moves.MINMOVE,moves.MAXMOVE+1)]
-        for i in range(0,len(tpv)):
-            tpv[i] = float(tpv[i])
-        #opponentplayer => res value
-        #rr,rp,rs,pr,pp,ps,sr,sp,ss
-        self.pofftable[moves.ROCK].append(tpv[0])
-        self.pofftable[moves.ROCK].append(tpv[1])
-        self.pofftable[moves.ROCK].append(tpv[2])
-
-        self.pofftable[moves.PAPER].append(tpv[3])
-        self.pofftable[moves.PAPER].append(tpv[4])
-        self.pofftable[moves.PAPER].append(tpv[5])
-        
-        self.pofftable[moves.SCISSORS].append(tpv[6])
-        self.pofftable[moves.SCISSORS].append(tpv[7])
-        self.pofftable[moves.SCISSORS].append(tpv[8])
-        ###################DONE WITH STUPID TABLE###################
-        
         
         for i in range(self.mem):
             self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
@@ -72,18 +53,35 @@ class agent:
     # Update our memory for them and our payload
     # UPdates our RESults
     def upres( self, res, opp ):
-        self.payoffs.append(self.pofftable[int(opp)][int(res)])
+        self.payoffs.append(self.gen.pofftable[int(opp)][int(res)])
         
         #Update our memory for them
         del self.tmoves[self.mem-1]
         self.tmoves.insert(0, opp)
         
     # Our fitness, just an average of our payloads
+    #   However we need to run our competition a few times
     def fitness( self ):
+        #FIXME: hacked in
+        otype = self.gen.cfg[MAIN][OPP] 
+        
+        for j in range(0,self.gen.seqs):
+            ores = ""
+            if otype == "0":
+                ores = victor( self.tmoves[0], self.mymoves[0] )
+            else:
+                ores = util.CSVAI( self.tmoves, self.mymoves )
+            
+            myres = self.run( )
+            
+            self.upres( myres, ores )
+            
         sum = 0
         for i in self.payoffs:
             sum += i
         self.fit = sum/len(self.payoffs)
+        
+        self.gen.fitevals += 1
         
     # Return our structure in preorder
     def serialize( self ):

@@ -6,7 +6,11 @@
 #main config sections
 AGENT = "agent"
 MAIN = "main"
+GENERATION = "gen"
 INIT = "init"
+PARSEL = "parentselection"
+MUTATION = "mutation"
+SURVSEL = "survivalselection"
 LOG = "log"
 
 #agent
@@ -21,8 +25,24 @@ RUNS = "runs"
 OPP = "opp"
 FITEVALS="fitevals"
 
+#gen
+MU = "mu"
+LAMBDA = "lamb"
+
 #init
 METHOD = "method"
+
+#survival and parent selection
+TYPE = "type"
+TOURNAMENT_K = "k"
+
+#mutate
+
+#arguments / operators
+FITNESS_PROPORTIONAL = "0"
+OVER_SELECTION = "1"
+TRUNCATION = "0"
+K_TOURNAMENT = "2"
 
 GROW = "grow"
 FULL = "full"

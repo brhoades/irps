@@ -56,8 +56,8 @@ def loadCSV( fn ):
             
             #At the values from rl[0] to rl[last-1] set rl[last]
             recurlook( loadCSV.logar, readlst[:-1], readlst[len(readlst)-1] )
-
-    return loadCSV.logar
+        
+        loadCSV.data = loadCSV.logar
         
 #Does a TRANslation from TAURItz's format
 def tauriTran( char ):
@@ -80,7 +80,9 @@ def tauriTran( char ):
 #  This uses a massive n-dimensonal array called csvdata
 #  in which we recursively use an array of indicies (mymove / tmove merged)
 #  to find the last value, which tells us what the provided AI does.
-def CSVAI( csvdata, tmoves, mymoves ):
+def CSVAI( tmoves, mymoves ):
+    csvdata = loadCSV.data
+    
     #Interlace tmoves and mmoves so it looks like Tauritz's thing
     interlacedHist = [ -5 for i in range(0,len(mymoves)*2) ]
     
@@ -360,14 +362,14 @@ def pad(num, pad):
     return inum.rjust(math.floor(math.log(int(pad), 10)+1), '0')
 
 #Prints our basic string out on the screen
-def prnBase( cfg, runn, fitevals, avgfit, bestfit, status ):
+def prnBase( cfg, runn, generation ):
     evals="~"
     avg="~"
     best="~"
     if runn != -1:
-        avg = round( avgfit, 4 )
-        evals = fitevals
-        best = round( bestfit, 4 )
+        avg = round( generation.average( ), 4 )
+        evals = generation.fitevals
+        best = round( generation.best( ), 4 )
     out = ""
     out += str(runn+1)
     if int(cfg[MAIN][RUNS]) >= 10:
@@ -375,17 +377,16 @@ def prnBase( cfg, runn, fitevals, avgfit, bestfit, status ):
     out += "\t"
     out += perStr( runn/int(cfg[MAIN][RUNS]) )
     out += "\t"
-    out += pad(fitevals, cfg[MAIN][FITEVALS])
+    out += pad(generation.fitevals, cfg[MAIN][FITEVALS])
     out += "\t"
     if math.log(int(cfg[MAIN][FITEVALS]), 10) >= 2:
         out += "\t"
-    out += perStr( fitevals/int(cfg[MAIN][FITEVALS]) )
+    out += perStr( generation.fitevals/int(cfg[MAIN][FITEVALS]) )
     out += "\t"
     out += str(avg)
     out += "\t"
     out += str(best)
     out += "\t\t"
-    out += status
     
-    delprn(out, 0)
+    delprn(out, 1)
     

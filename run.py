@@ -4,19 +4,16 @@
 # Our functions responsible for getting this whole mess running
 
 #fire up our custom libraries
-import os, sys, random
+import os, sys, random, time
 sys.path.append( os.path.abspath("lib") )
 
+from gen import gen
 from agent import agent
 from const import *
 from util import *
 
 def run( cfg, i, lg, olog ):
     #read some cfg stuff in and convert it. Also init various caches.
-    seqs = int(cfg[MAIN][SEQRUNS])
-    
-    if seqs < 3*int(cfg[AGENT][MEM]):
-        seqs = 3*int(cfg[AGENT][MEM])
     
     otype = cfg[MAIN][OPP]
     fitevals = int(cfg[MAIN][FITEVALS])
@@ -27,40 +24,30 @@ def run( cfg, i, lg, olog ):
     avg = []
     #Fitness counter
     fitcnt = 0
-    
-    while fitcnt < fitevals:
-        agnt = agent(cfg, type="evolve")        
         
-        #Do our sequences
-        for seqn in range(0,seqs):
-            ores = -2
-            #Do whatever the opponent is doing
-            if otype == "0":
-                ores = victor( agnt.tmoves[0], agnt.mymoves[0] )
-            else:
-                ores = CSVAI( olog, agnt.tmoves, agnt.mymoves )
-                
-            #Do our run
-            gpres = agnt.run( )
-            
-            #print( "GP:", tauriTran(gpres), " ", "Op:", tauriTran(ores), "  vic:", tauriTran(victor(gpres, ores)) )
-            
-            #Update our internal memory and payload
-            agnt.upres( gpres, ores )
+    generation = gen( cfg )
         
-        #Fitness check
-        agnt.fitness( )
-        fitcnt += 1
-        avg.append(agnt.fit)
-        
-        if best == None or agnt.fit > best.fit:
-            best = agnt
-            lg.entry( fitcnt, agnt)
-        
+    while generation.fitevals < fitevals:
         tavg = 0
-        for ind in avg:
-            tavg += ind
-        tavg /= len(avg)
-        prnBase( cfg, i, fitcnt, tavg, best.fit, "Running" )
+        bfit = 0
+        prnBase( cfg, i, generation )
+        
+        best = None
+        agnt = None
+        
+        generation.initialize( )
+        
+        prnBase( cfg, i, generation )
+        
+        time.sleep( 5 )
+        
+        #if best == None or agnt.fit > best.fit:
+            #best = agnt
+            #lg.entry( fitcnt, agnt)
+        
+        #tavg = 0
+        #for ind in avg:
+            #tavg += ind
+        #tavg /= len(avg)
         
     return best
