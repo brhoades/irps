@@ -129,6 +129,12 @@ class gen:
             
             kids.append(kid1)
             kids.append(kid2)
+            
+        #Just implementing plus for now
+        for ind in kids:
+            self.inds.append( ind ) 
+            
+
 
     def average( self ):
         avg = 0
