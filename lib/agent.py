@@ -66,7 +66,7 @@ class agent:
         otype = self.gen.cfg[MAIN][OPP] 
         
         for j in range(0,self.gen.seqs):
-            ores = ""
+            ores = -2
             if otype == "0":
                 ores = victor( self.tmoves[0], self.mymoves[0] )
             else:

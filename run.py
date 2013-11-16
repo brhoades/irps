@@ -39,6 +39,8 @@ def run( cfg, i, lg, olog ):
         
         prnBase( cfg, i, generation )
         
+        generation.recombination( )
+        
         time.sleep( 5 )
         
         #if best == None or agnt.fit > best.fit:

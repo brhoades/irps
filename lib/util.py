@@ -140,6 +140,50 @@ def nlist( list, n, w=3, trailingNull=False ):
         
     return list
     
+
+#Fitness related
+
+#Find our cumulative fitness. Next compare a random number to all of our generation's fitness.
+#We use a sort of inverse fitness function to get the "correct" fitness numbers
+def probSel( ogen, num, adj, neg=False, prn=False ):
+    gen = []
+    cumfit = 0
+    for solu in ogen:
+        gen.append(solu)
+        if not neg:
+            cumfit += solu.fit+1
+        else:
+            cumfit += adj-solu.fit+1
+        
+    rets = []
+    while len(rets) < num:
+        if prn:
+            delprn(''.join(perStr(len(rets)/num)), 3)
+        pnt = random.randint( 0, cumfit )
+        
+        tfit = 0
+        for solu in gen:
+            if pnt < tfit:
+                gen.remove(solu)
+                rets.append(solu)
+                if not neg:
+                    cumfit -= solu.fit+1
+                else:
+                    cumfit -= adj-solu.fit+1
+                break
+            if not neg:
+                tfit += solu.fit+1
+            else:
+                tfit -= adj-solu.fit+1
+        else:
+            rets.append(solu)
+            gen.remove(solu)
+            if not neg:
+                cumfit -= solu.fit+1
+            else:
+                cumfit -= adj-solu.fit+1
+    return rets
+  
 ######################################
 # RNG-related functions
 ######################################
@@ -353,7 +397,7 @@ def renderHead( cfg ):
     
     print(''.join(["Fit #/", cfg[MAIN][FITEVALS], "\t" "Fit %", "\t"]), end='')
     
-    print("Avg Fit\tBest Fit\tStatus" )
+    print("Avg Fit\tBest Fit\tStatus\t\tPercent")
     
 def pad(num, pad):
     if pad == '0':

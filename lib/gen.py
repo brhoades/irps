@@ -57,7 +57,7 @@ class gen:
         if self.seqs < 3*int(cfg[AGENT][MEM]):
             self.seqs = 3*int(cfg[AGENT][MEM])
         
-    # set up our inital population
+    # Set up our inital population
     def initialize( self ):
         self.inds = []
 
@@ -72,7 +72,40 @@ class gen:
         for i in range(0,len(self.inds)):
             delprn( ''.join([str(perStr( i/len(self.inds) )), "%"]), 3 )
             self.inds[i].fitness( )
+
+    # Select our parents for kids
+    def parentSelection( self ):
+        pairs = []
+        delprn( "Choosing Parents\t\t", 2 )
+        
+        if self.partype == FITNESS_PROPORTIONAL:
+            for i in range(0,self.lamb):
+                pairs.append( probSel( self.inds, 0, 2 ) )
+                delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
+        elif self.partype == OVER_SELECTION:
+            sortedinds = sorted(self.inds, key=agent.fit)
+            #always choose top 320 individuals according to book
+            top = sortedinds[:320]
+            bot = sortedinds[320:]
             
+            for i in range(0,self.lamb):
+                pair = []
+                for j in range(0,2):
+                    if roll(.8):
+                        pair.append(random.sample(top,1))
+                    else:
+                        pair.append(random.sample(bot,1))
+                pairs.append(pair)
+                delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
+        return pairs
+            
+            
+    # Breed and mix
+    def recombination( self ):
+        parents = self.parentSelection( )
+        delprn( "Makin' Babbies\t\t", 2 )
+        
+        
     def average( self ):
         avg = 0
         
