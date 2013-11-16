@@ -14,6 +14,10 @@ from util import *
 def run( cfg, i, lg, olog ):
     #read some cfg stuff in and convert it. Also init various caches.
     seqs = int(cfg[MAIN][SEQRUNS])
+    
+    if seqs < 3*int(cfg[AGENT][MEM]):
+        seqs = 3*int(cfg[AGENT][MEM])
+    
     otype = cfg[MAIN][OPP]
     fitevals = int(cfg[MAIN][FITEVALS])
         
