@@ -76,6 +76,68 @@ def tauriTran( char ):
     else:
         return tauriTran.table[int(char)]
     
+#Decide what the CSV tells us to do.
+#  This uses a massive n-dimensonal array called csvdata
+#  in which we recursively use an array of indicies (mymove / tmove merged)
+#  to find the last value, which tells us what the provided AI does.
+def CSVAI( csvdata, tmoves, mymoves ):
+    #Interlace tmoves and mmoves so it looks like Tauritz's thing
+    interlacedHist = [ -5 for i in range(0,len(mymoves)*2) ]
+    
+    histi = 0 
+    #P1, O1, P2, O2, ...Pn, On, Outcome
+    #my moves, player, go before the opponent's
+    for i in range(0,len(mymoves)*2, 2):
+        interlacedHist[i] = mymoves[histi]
+        histi += 1
+    
+    histi = 0 
+    for i in range(1,len(tmoves)*2, 2):
+        interlacedHist[i] = tmoves[histi]
+        histi += 1
+        
+    if len(interlacedHist) != len(tmoves)*2:
+        raise TypeError("Math problem in history calculation!")
+    
+    #Splice this to only have the data that's relevant in our AI's 
+    #  data file.
+    #FIXME: This is awful
+    if len(interlacedHist) > loadCSV.k*2:
+        interlacedHist = interlacedHist[(loadCSV.k*2):]
+
+    #Look for our string in csvdata
+    return recurlook(csvdata, interlacedHist)
+
+#Recursively pops values off indicies, an array of indicies,
+#  for our n-dimensional list, array, and either:
+#    * Sets the spot at the last index, in indicies, to set, and 
+#        returns that value
+#    * Returns the value at that index if set is not defined
+def recurlook( array, indicies, set=None ):
+    if len(indicies) > 1:
+        return recurlook(array[indicies.pop()], indicies, set)
+    elif set != None:
+        array[indicies.pop()] = set
+        return set
+    
+    #Otherwise we return the value there, since set isn't set
+    return array[indicies.pop()]
+    
+#Create a n-dimensional list that's w wide at each level, must be uniform
+#  If trailingnull is set, a -1 will be appended to the last level of the 
+#  list.
+def nlist( list, n, w=3, trailingNull=False ):
+    n -= 1
+    
+    if n >= 0:
+        for i in range(0,w):
+            list.append([])
+            nlist( list[i], n, w )
+    elif trailingNull:
+        list.append(-1)
+        
+    return list
+    
 ######################################
 # RNG-related functions
 ######################################
