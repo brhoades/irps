@@ -26,6 +26,8 @@ class gen:
         
         self.partype = cfg[PARSEL][TYPE]
         
+        self.mutaterate = float(cfg[MUTATE][MUTATION_RATE])
+        
         self.agent = cfg[AGENT]
         self.main = cfg[MAIN]
         
@@ -123,6 +125,10 @@ class gen:
             #Now swap subtrees
             tree.swapsubtree( kid1.tree, kid1pt, kid2.tree, kid2pt )
             
+            #Mutate them
+            kid1.mutate( )
+            kid2.mutate( )
+            
             #Determine fitness
             kid1.fitness( )
             kid2.fitness( )
@@ -134,7 +140,8 @@ class gen:
         for ind in kids:
             self.inds.append( ind ) 
             
-
+    def survivalselection( self ):
+        return
 
     def average( self ):
         avg = 0

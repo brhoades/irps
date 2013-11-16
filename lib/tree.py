@@ -108,6 +108,18 @@ class tree:
         for n in nod.children:
             if not n.isLeaf:
                 self.populate( method, n )
+                
+    #Derefs everything including that node
+    def delete( self, node ):
+        if node == self.root:
+            self.root = None
+        node.parent = None
+        
+        if not node.isLeaf:
+            self.delete( node.children[0] )
+            self.delete( node.children[1] )
+        
+        del node.children
     
 #Swaps two subtrees between two trees
 # 1) Dereferences two subtress from their tree.

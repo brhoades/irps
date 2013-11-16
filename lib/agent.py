@@ -5,7 +5,7 @@
 
 import util, random
 from node import node
-from tree import tree
+from tree import *
 from const import *
 
 class agent:
@@ -120,4 +120,17 @@ class agent:
         
         return ret
     
+    def mutate( self ):
+        if not util.roll( self.gen.mutaterate ):
+            return
         
+        point = random.sample(self.tree.nodes, 1)[0]
+        
+        newtree = tree( self, int(self.tree.maxdepth), "grow", "evolve" )
+        
+        if self.tree.root == point:
+            self.tree.root = newtree.root
+        self.tree.delete( point )
+        updateSTree( newtree.root, self.tree )
+
+            

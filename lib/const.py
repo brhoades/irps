@@ -9,7 +9,7 @@ MAIN = "main"
 GENERATION = "gen"
 INIT = "init"
 PARSEL = "parentselection"
-MUTATION = "mutation"
+MUTATE = "mutation"
 SURVSEL = "survivalselection"
 LOG = "log"
 
@@ -38,6 +38,7 @@ TYPE = "type"
 TOURNAMENT_K = "k"
 
 #mutate
+MUTATION_RATE = "chance"
 
 #arguments / operators
 FITNESS_PROPORTIONAL = "0"
