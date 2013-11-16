@@ -7,7 +7,7 @@ import util, random
 from const import *
 
 class node:
-    def __init__( self, tree, parent, op, leaf ):
+    def __init__( self, tree, parent, **args ):
         #our tree
         self.tree = tree
 
@@ -15,14 +15,14 @@ class node:
         self.parent = parent
         
         #leaf or node
-        self.isLeaf = leaf
+        self.isLeaf = args["leaf"]
         
         # our operation. If we're a leaf this is a list with P/O on the first spot, and a number following. 
         # If this is a node it's a function ref
-        if op == None and not leaf:
+        if not "op" in args and not args["leaf"]:
             self.operator = self.randomOp( )
         else:
-            self.operator = op
+            self.operator = args["op"]
         
         #Our two children
         self.children = []
@@ -35,6 +35,9 @@ class node:
             self.depth = 0
         else:
             raise ReferenceError("Dangling node with no parent")
+        
+        self.tree.nodes.append( self )
+        
     
     # Gives us a random operator reference
     def randomOp( self ):

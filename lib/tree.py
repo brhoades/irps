@@ -17,8 +17,8 @@ class tree:
         #FIXME: This should be generation-level
         self.maxdepth = maxdepth
         
-        #Nodes by depth
-        self.nbd = [ [] for i in range(self.maxdepth) ]
+        #Array of all nodes
+        self.nodes = []
         
         #Root node
         self.root = None
@@ -35,10 +35,10 @@ class tree:
         elif type == "lastwin":
             #Drop a simple tree here that always chooses last winner
             #Our memory is a queue where [0] is the latest
-            self.root = node( self, None, None, False )
+            self.root = node( self, None, leaf=False )
             self.root.operator = self.root.winner
-            self.root.children.append( node( self, self.root, ["O", 0], False ) )
-            self.root.children.append( node( self, self.root, ["P", 0], False ) )
+            self.root.children.append( node( self, self.root, op=["O", 0], leaf=False ) )
+            self.root.children.append( node( self, self.root, ["P", 0], leaf=False ) )
         
     def __str__( self ):
         ret = ""
@@ -52,13 +52,28 @@ class tree:
             ret += "\n"
         return ret
     
+    def copy( self, other ):
+        self.root = node( self, None, leaf=other.root.isLeaf, op=other.root.operator )
+        
+        if not self.root.isLeaf:
+            self.copynode( self.root, other.root.children[0] )
+            self.copynode( self.root, other.root.children[1] )
+            
+    def copynode( self, parent, nod ):
+        thisnode = node( self, parent, leaf=nod.isLeaf, op=nod.operator )
+        parent.children.append( thisnode )
+        
+        if not thisnode.isLeaf:
+            self.copynode( thisnode, nod.children[0] )
+            self.copynode( thisnode, nod.children[1] )
+            
     # Pass a parent and we'll randomly add a terminal/node or intelligently end the tree
     def randomNodule( self, parent, meth=None ):
         #True? We're going to be a terminal
         if ( meth == GROW and util.flip( ) ) or self.maxdepth <= 1 or ( parent != None and parent.depth == self.maxdepth-2 ):
-            return node( self, parent, self.randomTerm( ), True )
+            return node( self, parent, op=self.randomTerm( ), leaf=True )
         else:
-            return node( self, parent, None, False )
+            return node( self, parent, leaf=False )
     
     # Randomly return a terminal
     def randomTerm( self ):
@@ -93,3 +108,43 @@ class tree:
         for n in nod.children:
             if not n.isLeaf:
                 self.populate( method, n )
+    
+#Swaps two subtrees between two trees
+# 1) Dereferences two subtress from their tree.
+# 2) Points them to a new tree with its new children.
+# 3) Recursively updates depth.
+def swapsubtree( mytree, mysubtree, theirtree, theirsubtree ):
+    #root check, swap roots if applicable
+    if mysubtree.parent == None:
+        mytree.root = theirsubtree
+    if theirsubtree.parent == None:
+        theirtree.root = mysubtree
+    
+    #Exchange parents
+    mypar = theirsubtree.parent
+    theirsubtree.parent = mysubtree.parent
+    mysubtree.parent = mypar
+    
+    updateSTree( mysubtree, theirtree )
+    updateSTree( theirsubtree, mytree )
+
+#Recursively UPDATES a Sub TREE's references/depth
+def updateSTree( node, ntree ):
+    otree = node.tree
+    node.tree = ntree
+    
+    if node.parent == None:
+        node.depth = 0
+    else:
+        node.depth = node.parent.depth + 1
+    
+    #Update tree's depth
+    if node.depth > node.tree.depth:
+        node.tree.depth = node.depth
+    
+    #Update both tree's nodes
+    node.tree.nodes.append( node )
+    otree.nodes.remove( node )
+    
+    for n in node.children:
+        updateSTree( n, ntree )

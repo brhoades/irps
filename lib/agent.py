@@ -9,7 +9,7 @@ from tree import tree
 from const import *
 
 class agent:
-    def __init__( self, gen, cfg, type="evolve" ):
+    def __init__( self, gen, **args ):        
         #Our parent generation
         self.gen = gen
         
@@ -22,12 +22,18 @@ class agent:
         #Store Their MOVES on each sequence, ordered
         self.tmoves = []
         
-        self.mem = int(cfg[AGENT][MEM])
+        self.mem = int(self.gen.agent[MEM])
         if self.mem < 4:
             self.mem = 4
-            
-        self.tree = tree( self, int(cfg[AGENT][DEPTH]), self.gen.method, type )
-
+        
+        if not "copy" in args:
+            if not type in args:
+                args["type"] = "evolve"
+            self.tree = tree( self, int(self.gen.agent[DEPTH]), self.gen.method, args["type"] )
+        else:
+            self.tree = tree( self, int(self.gen.agent[DEPTH]), None, "copy" )
+            self.tree.copy( args["copy"].tree )
+        
         self.fit = 0
         
         for i in range(self.mem):

@@ -6,7 +6,8 @@
 from agent import agent
 from const import *
 from util import *
-import random
+
+import random, tree
 
 class gen:
     def __init__( self, cfg ):
@@ -65,7 +66,7 @@ class gen:
         #Set up random trees
         for i in range(0,self.mu):
             delprn( ''.join([str(perStr( i/self.mu )), "%"]), 3 )
-            self.inds.append(agent( self, self.cfg ) )
+            self.inds.append(agent( self ) )
         
         delprn( "Calc. Inital Fitness\t", 2 )
         #Do our initial run
@@ -92,9 +93,9 @@ class gen:
                 pair = []
                 for j in range(0,2):
                     if roll(.8):
-                        pair.append(random.sample(top,1))
+                        pair.append(random.sample(top,1)[0])
                     else:
-                        pair.append(random.sample(bot,1))
+                        pair.append(random.sample(bot,1)[0])
                 pairs.append(pair)
                 delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
         return pairs
@@ -102,9 +103,33 @@ class gen:
     # Breed and mix
     def recombination( self ):
         parents = self.parentSelection( )
+        kids = []
         delprn( "Makin' Babbies\t\t", 2 )
-        
-        
+        for i in range(0,len(parents)):
+            delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
+            pair = parents[i]
+            p1 = pair[0]
+            p2 = pair[1]
+            #We're just doing cross over for now, so hardcode this in:
+            
+            #Create two kids, one from each parent
+            kid1 = agent( self, copy=p1 )
+            kid2 = agent( self, copy=p2 )
+            
+            #And sample for a random crossover point from both kids
+            kid1pt = random.sample(kid1.tree.nodes, 1)[0]
+            kid2pt = random.sample(kid2.tree.nodes, 1)[0]
+            
+            #Now swap subtrees
+            tree.swapsubtree( kid1.tree, kid1pt, kid2.tree, kid2pt )
+            
+            #Determine fitness
+            kid1.fitness( )
+            kid2.fitness( )
+            
+            kids.append(kid1)
+            kids.append(kid2)
+
     def average( self ):
         avg = 0
         
