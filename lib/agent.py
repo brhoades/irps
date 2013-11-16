@@ -15,7 +15,7 @@ class agent:
         #Store our moves on each sequence, ordered
         self.mymoves = []
         
-        #Store their moves on each sequence, ordered
+        #Store Their MOVES on each sequence, ordered
         self.tmoves = []
         
         self.mem = int(cfg[AGENT][MEM])
@@ -31,6 +31,7 @@ class agent:
         
         ################### Process stupid table ###################
         tpv = cfg[AGENT][PAYOFF].split(',')
+        #Pay OFF TABLE
         self.pofftable = [[] for i in range(moves.MINMOVE,moves.MAXMOVE+1)]
         for i in range(0,len(tpv)):
             tpv[i] = float(tpv[i])
@@ -144,6 +145,7 @@ class agent:
         return res
     
     # Update our memory for them and our payload
+    # UPdates our RESults
     def upres( self, res, opp ):
         self.payoffs.append(self.pofftable[int(opp)][int(res)])
         

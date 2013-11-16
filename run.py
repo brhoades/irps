@@ -34,7 +34,7 @@ def run( cfg, i, lg, olog ):
             if otype == "0":
                 ores = victor( agnt.tmoves[0], agnt.mymoves[0] )
             else:
-                ores = csvop( olog, agnt.tmoves, agnt.mymoves )
+                ores = CSVAI( olog, agnt.tmoves, agnt.mymoves )
                 
             #Do our run
             gpres = agnt.run( )

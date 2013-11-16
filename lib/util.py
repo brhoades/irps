@@ -76,59 +76,6 @@ def tauriTran( char ):
     else:
         return tauriTran.table[int(char)]
     
-
-#Decide what the csv tells us to do
-def csvop( csvdata, tmov, mymove ):
-    ##################interlace tmov and mmov so it looks like Tauritz's thing
-    hist = [ -5 for i in range(0,len(mymove)*2) ]
-    
-    hsti = 0 
-    #P1, O1, P2, O2, ...Pn, On, Outcome
-    #my moves, player, go before the opponent's
-    for i in range(0,len(mymove)*2, 2):
-        hist[i] = mymove[hsti]
-        hsti += 1
-    
-    hsti = 0
-    for i in range(1,len(tmov)*2, 2):
-        hist[i] = tmov[hsti]
-        hsti += 1
-        
-    if len(hist) != len(tmov)*2:
-        raise TypeError("Math problem in history calculation!")
-    
-    #splice this to only have the data that's relevant in st
-    #FIXME: This is awful
-    if len(hist) > loadCSV.k*2:
-        hist = hist[(loadCSV.k*2):]
-
-    #Look for our string in csvdata
-    return recurlook(csvdata, hist)
-
-#Recursively pops values off lv and looks at that spot in l.
-#  If set != None, it sets that index to set.
-def recurlook( l, lv, st=None ):
-    if len(lv) > 1:
-        return recurlook(l[lv.pop()], lv, st)
-    elif st != None:
-        l[lv.pop()] = st
-        return st
-    
-    return l[lv.pop()]
-    
-#Create a n-dimensional list that's x wide
-#  endel adds a value onto the end automatically
-def nlist( l, n, x=3, endel=False ):
-    n -= 1
-    if n >= 0:
-        for i in range(0,x):
-            l.append([])
-            nlist( l[i], n, x )
-    elif endel:
-        l.append(-1)
-        
-    return l
-    
 ######################################
 # RNG-related functions
 ######################################
