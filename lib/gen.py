@@ -83,7 +83,7 @@ class gen:
                 pairs.append( probSel( self.inds, 0, 2 ) )
                 delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
         elif self.partype == OVER_SELECTION:
-            sortedinds = sorted(self.inds, key=agent.fit)
+            sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
             #always choose top 320 individuals according to book
             top = sortedinds[:320]
             bot = sortedinds[320:]
