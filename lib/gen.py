@@ -149,16 +149,20 @@ class gen:
             #Just doing plus, so trim it down to mu
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
             
-            #FIXME: If we don't call delete on these missing ones we're going
-            #  to memleak everywhere. This is sorted worst to best, so grab last mu
+            #This is sorted worst to best, so grab last mu
             #  since pop is currently self.lamb + self.mu (FIXME: this breaks comma)
             #  we grab from lamba on
             self.inds = sortedinds[self.lamb:]
+            dead = sortedinds[:self.lamb]
             
+            while len(dead) > 0:
+                dead.pop( ).delete( )
+                
         elif self.survtype == K_TOURNAMENT:
             for i in range(0,self.lamb):
-                #FIXME: See above FIXME
-                self.inds.remove( self.tournament( False, self.survk, i, self.lamb ) )
+                dead = self.tournament( False, self.survk, i, self.lamb )
+                self.inds.remove( dead )
+                dead.delete( )
 
     # Creates a random tournament and returns a one indivudal
     #   Disqualified peeps in ineg.

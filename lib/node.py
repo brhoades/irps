@@ -17,10 +17,17 @@ class node:
         #leaf or node
         self.isLeaf = args["leaf"]
         
+        #Set these for copy recognition
+        self.winner.__dict__["type"] = "winner"
+        self.other.__dict__["type"] = "other"
+        self.loser.__dict__["type"] = "loser"
+        
         # our operation. If we're a leaf this is a list with P/O on the first spot, and a number following. 
         # If this is a node it's a function ref
         if not "op" in args and not args["leaf"]:
             self.operator = self.randomOp( )
+        elif not args["leaf"] and "copy" in args:
+            self.operator = self.copyOp( args["op"] )
         else:
             self.operator = args["op"]
         
@@ -95,7 +102,6 @@ class node:
       
     # "Looks up" in our memory what our operator looks for, when we are a leaf
     def lookup( self ):
-        
         type, index = self.operator
         lu = None
         
@@ -107,6 +113,15 @@ class node:
             lu = self.tree.agent.mymoves
 
         return lu[index]
+    
+    #Copies an operator over to our own operator using an internal register
+    def copyOp( self, other ):
+        if other.type == "winner":
+            return self.winner
+        if other.type == "loser":
+            return self.loser
+        if other.type == "other":
+            return self.other
     
     #Derefs everything below including this node
     def delete( self ):

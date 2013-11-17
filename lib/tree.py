@@ -53,14 +53,16 @@ class tree:
         return ret
     
     def copy( self, other ):
-        self.root = node( self, None, leaf=other.root.isLeaf, op=other.root.operator )
-                
+        self.root = node( self, None, leaf=other.root.isLeaf, op=other.root.operator, copy=True )
+        
+        print( other.root.operator.__str__( ) )
+        
         if not self.root.isLeaf:
             self.copynode( self.root, other.root.children[0] )
             self.copynode( self.root, other.root.children[1] )
             
     def copynode( self, parent, nod ):
-        thisnode = node( self, parent, leaf=nod.isLeaf, op=nod.operator )
+        thisnode = node( self, parent, leaf=nod.isLeaf, op=nod.operator, copy=True )
         parent.children.append( thisnode )
         
         if not thisnode.isLeaf:
@@ -111,8 +113,9 @@ class tree:
                 
     #Derefs everything
     def delete( self ):
-        while len(self.nodes) > 0:
-            self.nodes.pop( ).delete( )
+        self.root.delete( )
+        
+        self.nodes = [1]
         
         self.root = None
         self.agent = None
