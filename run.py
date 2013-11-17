@@ -17,9 +17,6 @@ def run( cfg, i, lg, olog ):
     
     cfg[TERMINATE][NO_CHANGE_FITNESS] = int(cfg[TERMINATE][NO_CHANGE_FITNESS])
     cfg[TERMINATE][FITEVALS] = int(cfg[TERMINATE][FITEVALS])
-    
-    #Fitness counter
-    fitcnt = 0
         
     generation = gen( cfg )
         
@@ -30,6 +27,7 @@ def run( cfg, i, lg, olog ):
     prnBase( cfg, i, generation )
         
     while noTerminate( cfg, generation ):
+        lg.entry(generation)
         
         #Recomb + Mutation
         generation.recombination( )
@@ -37,18 +35,12 @@ def run( cfg, i, lg, olog ):
         
         #Survival
         generation.survivalselection( )
-        prnBase( cfg, i, generation )
+        #prnBase( cfg, i, generation )
         
-    if best == None or agnt.fit > best.fit:
-        best = agnt
-        lg.entry( fitcnt, agnt)
-    
-    tavg = 0
-    for ind in avg:
-        tavg += ind
-    tavg /= len(avg)
+
+    lg.entry(generation)
         
-    return best
+    return generation.best( )
 
 def noTerminate( cfg, generation ):
     if cfg[TERMINATE][TYPE] == NUM_OF_FITEVALS:

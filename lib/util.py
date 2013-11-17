@@ -287,8 +287,8 @@ class log:
         self.res.write( ''.join( [ "\n", "Run ", str(run+1), "\n" ] ) )
         self.res.flush( )
     
-    def entry( self, evals, nbest ):
-        self.res.write( ''.join( [ str(evals), "\t", str(nbest.fit), "\n" ] ) )
+    def entry( self, gen ):
+        self.res.write( ''.join( [ str(gen.fitevals), "\t", str(gen.average( )), "\t", str(gen.best( ).fit), "\n" ] ) )
     
     # Our generational best
     def spacer( self ):
@@ -413,10 +413,10 @@ def prnBase( cfg, runn, generation ):
     evals="~"
     avg="~"
     best="~"
-    if runn != -1:
+    if len(generation.inds) > 0:
         avg = round( generation.average( ), 4 )
         evals = generation.fitevals
-        best = round( generation.best( ), 4 )
+        best = round( generation.best( ).fit, 4 )
     out = ""
     out += str(runn+1)
     if int(cfg[MAIN][RUNS]) >= 10:

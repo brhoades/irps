@@ -211,6 +211,5 @@ class gen:
             
             best = sortedinds[len(sortedinds)-1]
             
-            return best.fit
-        else:
-            return 0
+            return best
+        return None
