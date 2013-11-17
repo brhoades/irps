@@ -214,9 +214,16 @@ class gen:
         
     def best( self ):
         if len(self.inds) > 0:
-            sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
+            sortedinds = sorted(self.inds, key=lambda ind: ind.fit, reverse=True)
             
-            best = sortedinds[len(sortedinds)-1]
+            best = sortedinds[0]
+            i = 1
+            next = sortedinds[i]
+            while best.fit == next.fit and i < len(sortedinds):
+                if next.tree.depth < best.tree.depth:
+                    best = next
+                i += 1
+                next = sortedinds[i]
             
             return best
         return None
