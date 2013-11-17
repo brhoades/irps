@@ -105,7 +105,7 @@ def CSVAI( tmoves, mymoves ):
     #  data file.
     #FIXME: This is awful
     if len(interlacedHist) > loadCSV.k*2:
-        interlacedHist = interlacedHist[(loadCSV.k*2):]
+        return recurlook( csvdata, interlacedHist[-(loadCSV.k*2):] )
 
     #Look for our string in csvdata
     return recurlook(csvdata, interlacedHist)
