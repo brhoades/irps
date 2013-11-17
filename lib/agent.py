@@ -135,7 +135,9 @@ class agent:
             #Set our new parent to us
             newtree.root.parent.children[newtree.root.parent.children.index(point)] = newtree.root
             
-        self.tree.delete( point )
+        point.delete( )
         updateSTree( newtree.root, self.tree )
 
-            
+    def delete( self ):
+        self.gen = None
+        self.tree.delete( )

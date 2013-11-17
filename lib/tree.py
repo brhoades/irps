@@ -109,20 +109,13 @@ class tree:
             if not n.isLeaf:
                 self.populate( method, n )
                 
-    #Derefs everything including that node
-    def delete( self, nod ):
-        if nod == self.root:
-            self.root = None
-        nod.parent = None
+    #Derefs everything
+    def delete( self ):
+        while len(self.nodes) > 0:
+            self.nodes.pop( ).delete( )
         
-        if not nod.isLeaf:
-            self.delete( nod.children[0] )
-            self.delete( nod.children[1] )
-        
-        if nod in self.nodes:
-            self.nodes.remove( nod )
-        
-        nod.children = [1]
+        self.root = None
+        self.agent = None
     
 #Swaps two subtrees between two trees
 # 1) Dereferences two subtress from their tree.

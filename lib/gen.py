@@ -142,6 +142,7 @@ class gen:
             self.inds.append( ind ) 
     
     # Survival selection routine.
+    # FIXME: Only need half as many parents
     def survivalselection( self ):
         delprn( "Survival\t\t", 2 )
         if self.survtype == TRUNCATION:
@@ -213,3 +214,7 @@ class gen:
             
             return best
         return None
+    
+    def delete( self ):
+        while len(self.inds) > 0:
+            self.inds.pop( ).delete( )

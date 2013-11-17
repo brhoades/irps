@@ -107,3 +107,15 @@ class node:
             lu = self.tree.agent.mymoves
 
         return lu[index]
+    
+    #Derefs everything below including this node
+    def delete( self ):
+        self.parent = None
+        
+        if not self.isLeaf:
+            self.children[0].delete( )
+            self.children[1].delete( )
+
+        self.tree = None
+        
+        self.children = [1]
