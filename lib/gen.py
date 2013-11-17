@@ -162,10 +162,10 @@ class gen:
     # Creates a random tournament and returns a one indivudal
     #   Disqualified peeps in ineg.
     def tournament( self, pos=True, size=5, curnum=1, totnum=1, ineg=[] ):
-        parents = random.sample(self.ind, size)
+        parents = random.sample(self.inds, size)
         once = True
         while once or len(parents) < size:
-            parents.extend( random.sample(self.ind,size-len(parents)) )
+            parents.extend( random.sample(self.inds, size-len(parents)) )
             for sqr in ineg:
                 if sqr in parents:
                     parents.remove( sqr )
