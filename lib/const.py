@@ -11,6 +11,7 @@ INIT = "init"
 PARSEL = "parentselection"
 MUTATE = "mutation"
 SURVSEL = "survivalselection"
+TERMINATE = "terminate"
 LOG = "log"
 
 #agent
@@ -24,7 +25,6 @@ SEED = "seed"
 SEQRUNS = "l"
 RUNS = "runs"
 OPP = "opp"
-FITEVALS="fitevals"
 
 #gen
 MU = "mu"
@@ -40,11 +40,19 @@ TOURNAMENT_K = "k"
 #mutate
 MUTATION_RATE = "chance"
 
+#Termination parameters
+FITEVALS="fitevals"
+NO_CHANGE_FITNESS="j"
+
 #arguments / operators
 FITNESS_PROPORTIONAL = "0"
 OVER_SELECTION = "1"
 TRUNCATION = "0"
 K_TOURNAMENT = "2"
+
+#Termination shit
+NUM_OF_FITEVALS = "0"
+NO_CHANGE_IN_FITNESS = "1"
 
 GROW = "grow"
 FULL = "full"

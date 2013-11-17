@@ -395,7 +395,10 @@ def renderHead( cfg ):
         print('\t', end='') 
     print(''.join(["Run %", "\t"]), end='')
     
-    print(''.join(["Fit #/", cfg[MAIN][FITEVALS], "\t" "Fit %", "\t"]), end='')
+    if cfg[TERMINATE][TYPE] == NUM_OF_FITEVALS:
+        print(''.join(["Fit #/", cfg[TERMINATE][FITEVALS], "\t" "Fit %", "\t"]), end='')
+    else:
+        print('Fit #\t', end='')
     
     print("Avg Fit\tBest Fit\tStatus\t\tPercent")
     
@@ -421,12 +424,13 @@ def prnBase( cfg, runn, generation ):
     out += "\t"
     out += perStr( runn/int(cfg[MAIN][RUNS]) )
     out += "\t"
-    out += pad(generation.fitevals, cfg[MAIN][FITEVALS])
+    out += pad(generation.fitevals, cfg[TERMINATE][FITEVALS])
     out += "\t"
-    if math.log(int(cfg[MAIN][FITEVALS]), 10) >= 2:
+    if cfg[TERMINATE][TYPE] == NUM_OF_FITEVALS:
+        if math.log(int(cfg[TERMINATE][FITEVALS]), 10) >= 2:
+            out += "\t"
+        out += perStr( generation.fitevals/int(cfg[TERMINATE][FITEVALS]) )
         out += "\t"
-    out += perStr( generation.fitevals/int(cfg[MAIN][FITEVALS]) )
-    out += "\t"
     out += str(avg)
     out += "\t"
     out += str(best)

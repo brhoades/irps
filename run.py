@@ -15,13 +15,9 @@ from util import *
 def run( cfg, i, lg, olog ):
     #read some cfg stuff in and convert it. Also init various caches.
     
-    otype = cfg[MAIN][OPP]
-    fitevals = int(cfg[MAIN][FITEVALS])
-        
-    #running best stuff
-    best = None
-    #Running average
-    avg = []
+    cfg[TERMINATE][NO_CHANGE_FITNESS] = int(cfg[TERMINATE][NO_CHANGE_FITNESS])
+    cfg[TERMINATE][FITEVALS] = int(cfg[TERMINATE][FITEVALS])
+    
     #Fitness counter
     fitcnt = 0
         
@@ -33,7 +29,7 @@ def run( cfg, i, lg, olog ):
         
     prnBase( cfg, i, generation )
         
-    while generation.fitevals < fitevals:
+    while noTerminate( cfg, generation ):
         
         #Recomb + Mutation
         generation.recombination( )
@@ -43,13 +39,34 @@ def run( cfg, i, lg, olog ):
         generation.survivalselection( )
         prnBase( cfg, i, generation )
         
-        #if best == None or agnt.fit > best.fit:
-            #best = agnt
-            #lg.entry( fitcnt, agnt)
-        
-        #tavg = 0
-        #for ind in avg:
-            #tavg += ind
-        #tavg /= len(avg)
+    if best == None or agnt.fit > best.fit:
+        best = agnt
+        lg.entry( fitcnt, agnt)
+    
+    tavg = 0
+    for ind in avg:
+        tavg += ind
+    tavg /= len(avg)
         
     return best
+
+def noTerminate( cfg, generation ):
+    if cfg[TERMINATE][TYPE] == NUM_OF_FITEVALS:
+        if generation.fitevals >= cfg[TERMINATE][FITEVALS]:
+            return False
+        else:
+            return True
+    elif cfg[TERMINATE][TYPE] == NO_CHANGE_IN_FITNESS:
+        if not hasattr( noTerminate, "lastavg" ):
+            noTerminate.lastavg = 0
+            noTerminate.lastChange = 0
+        if generation.average( ) > noTerminate.lastavg:
+            noTerminate.lastavg = generation.average( )
+            noTerminate.lastChange = 0
+        else:
+            noTerminate.lastChange += 1
+        if noTerminate.lastChange >= cfg[TERMINATE][NO_CHANGE_FITNESS]:
+            return False
+        else:
+            return True
+        
