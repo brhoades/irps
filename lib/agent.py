@@ -74,7 +74,7 @@ class agent:
         for j in range(0,self.gen.seqs):
             ores = -2
             if otype == "0":
-                ores = victor( self.tmoves[0], self.mymoves[0] )
+                ores = util.victor( self.tmoves[0], self.mymoves[0] )
             else:
                 ores = util.CSVAI( self.tmoves, self.mymoves )
             

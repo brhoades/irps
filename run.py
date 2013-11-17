@@ -12,7 +12,7 @@ from agent import agent
 from const import *
 from util import *
 
-def run( cfg, i, lg, olog ):
+def run( cfg, i, lg ):
     #read some cfg stuff in and convert it. Also init various caches.
     
     cfg[TERMINATE][NO_CHANGE_FITNESS] = int(cfg[TERMINATE][NO_CHANGE_FITNESS])
@@ -31,11 +31,11 @@ def run( cfg, i, lg, olog ):
         
         #Recomb + Mutation
         generation.recombination( )
-        prnBase( cfg, i, generation )
+        #prnBase( cfg, i, generation )
         
         #Survival
         generation.survivalselection( )
-        #prnBase( cfg, i, generation )
+        prnBase( cfg, i, generation )
         
 
     lg.entry(generation)

@@ -69,13 +69,13 @@ class gen:
         delprn( "Creating Trees\t\t", 2 )
         #Set up random trees
         for i in range(0,self.mu):
-            delprn( ''.join([str(perStr( i/self.mu )), "%"]), 3 )
+            delprn( str(perStr( i/self.mu )), 3 )
             self.inds.append(agent( self ) )
         
         delprn( "Calc. Inital Fitness\t", 2 )
         #Do our initial run
         for i in range(0,len(self.inds)):
-            delprn( ''.join([str(perStr( i/len(self.inds) )), "%"]), 3 )
+            delprn( str(perStr( i/len(self.inds) )), 3 )
             self.inds[i].fitness( )
 
     # Select our parents for kids
@@ -87,7 +87,7 @@ class gen:
         if self.partype == FITNESS_PROPORTIONAL:
             for i in range(0,floor(self.lamb/2)):
                 pairs.append( probSel( self.inds, 0, 2 ) )
-                delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
+                delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
         elif self.partype == OVER_SELECTION:
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
             #always choose top 320 individuals according to book
@@ -103,16 +103,16 @@ class gen:
                     else:
                         pair.append(random.sample(bot,1)[0])
                 pairs.append(pair)
-                delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
+                delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
         return pairs
             
     # Breed and mix
     def recombination( self ):
         parents = self.parentSelection( )
         kids = []
-        delprn( "Creating Children\t\t", 2 )
+        delprn( "Creating Children\t", 2 )
         for i in range(0,len(parents)):
-            delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
+            delprn( str(perStr( i/self.lamb )), 3 )
             pair = parents[i]
             p1 = pair[0]
             p2 = pair[1]
