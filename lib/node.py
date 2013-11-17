@@ -37,17 +37,17 @@ class node:
             raise ReferenceError("Dangling node with no parent")
         
         self.tree.nodes.append( self )
-        
     
     # Gives us a random operator reference
     def randomOp( self ):
         rint = random.randint(0,2)
+        
         if rint == 0:
             return self.winner
         elif rint == 1:
             return self.loser
-        elif rint == 2:
-            return self.other
+        
+        return self.other
     
     # Winner returns the winner constant between our children
     def winner( self ):
@@ -62,8 +62,8 @@ class node:
         #return the LOSER, so the one that's not the victor
         if util.victor(cres[0], cres[1]) == cres[0]:
             return cres[1]
-        else:
-            return cres[0]
+        
+        return cres[0]
         
     # Other returns the OTHER option between the two children. If there's more
     #   than one other, it returns a random one of the two.
@@ -77,8 +77,8 @@ class node:
         
         if len(ops) == 1:
             return ops[0]
-        else:
-            return random.sample(ops, 1)[0]
+        
+        return random.sample(ops, 1)[0]
         
     # Gets the resulting rock, paper, or scissors results from all children        
     def getCRes( self ):
@@ -95,8 +95,6 @@ class node:
       
     # "Looks up" in our memory what our operator looks for, when we are a leaf
     def lookup( self ):
-        if not self.isLeaf:
-            raise TypeError("Lookup called on a node")
         
         type, index = self.operator
         lu = None
@@ -105,12 +103,7 @@ class node:
         #  at theirs.
         if type == "O":
             lu = self.tree.agent.tmoves
-        elif type == "P":
-            lu = self.tree.agent.mymoves
         else:
-            raise TypeError("Didn't get O or P for lookup in operator.")
-    
-        if index > len(lu):
-            raise TypeError("Somehow ended up with a index above k")
+            lu = self.tree.agent.mymoves
 
         return lu[index]
