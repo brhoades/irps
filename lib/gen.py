@@ -148,7 +148,6 @@ class gen:
             #Just doing plus, so trim it down to mu
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
             
-            print( sortedinds[0].fit, sortedinds[len(sortedinds)-1].fit )
             #FIXME: If we don't call delete on these missing ones we're going
             #  to memleak everywhere. This is sorted worst to best, so grab last mu
             #  since pop is currently self.lamb + self.mu (FIXME: this breaks comma)
@@ -207,10 +206,11 @@ class gen:
         return avg
         
     def best( self ):
-        best = 0
-        
-        for ind in self.inds:
-            if ind.fit > best:
-                best = ind.fit
-        
-        return best
+        if len(self.inds) > 0:
+            sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
+            
+            best = sortedinds[len(sortedinds)-1]
+            
+            return best.fit
+        else:
+            return 0

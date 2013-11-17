@@ -86,9 +86,9 @@ class agent:
         for i in self.payoffs:
             sum += i
         self.fit = sum/len(self.payoffs)
-        
+
         self.penalize( )
-        
+
         self.gen.fitevals += 1
         
     # Penalizes our fitness based on tree size
@@ -96,7 +96,7 @@ class agent:
         coeff = float(self.gen.agent[PARSIMONY_PRESSURE_COEFF])
         
         if self.tree.depth > self.tree.maxdepth:
-            self.fit -= (self.tree.maxdepth - self.tree.depth) * coeff
+            self.fit += (self.tree.maxdepth - self.tree.depth) * coeff
             if self.fit < 0:
                 self.fit = 0
         
