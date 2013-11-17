@@ -133,4 +133,6 @@ class node:
 
         self.tree = None
         
+        self.op = None
+        
         self.children = [1]

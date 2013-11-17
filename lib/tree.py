@@ -54,9 +54,7 @@ class tree:
     
     def copy( self, other ):
         self.root = node( self, None, leaf=other.root.isLeaf, op=other.root.operator, copy=True )
-        
-        print( other.root.operator.__str__( ) )
-        
+                
         if not self.root.isLeaf:
             self.copynode( self.root, other.root.children[0] )
             self.copynode( self.root, other.root.children[1] )

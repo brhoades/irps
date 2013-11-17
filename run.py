@@ -39,8 +39,13 @@ def run( cfg, i, lg, olog ):
         
 
     lg.entry(generation)
+    
+    #delicately extract the best from the generation
+    best = generation.best( )
+    generation.delete( best )
+    best.gen = None
         
-    return generation.best( )
+    return best
 
 def noTerminate( cfg, generation ):
     if cfg[TERMINATE][TYPE] == NUM_OF_FITEVALS:

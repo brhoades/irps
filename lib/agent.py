@@ -141,3 +141,4 @@ class agent:
     def delete( self ):
         self.gen = None
         self.tree.delete( )
+        self.tree = None

@@ -219,6 +219,9 @@ class gen:
             return best
         return None
     
-    def delete( self ):
+    def delete( self, save=None ):
         while len(self.inds) > 0:
-            self.inds.pop( ).delete( )
+            next = self.inds.pop( )
+            if next == save:
+                continue
+            next.delete( )
