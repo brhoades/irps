@@ -109,6 +109,31 @@ class tree:
             if not n.isLeaf:
                 self.populate( method, n )
                 
+    #Update depth on the tree recursively and accurately
+    def updateDepth( self, nod=None ):
+        set = False
+        if nod == None:
+            nod = self.root
+            set = True
+        
+        if not nod.isLeaf:
+            d1 = self.updateDepth( nod.children[0] )
+            d2 = self.updateDepth( nod.children[1] )
+            
+            if d1 >= d2 and not set:
+                return d1
+            elif d1 > d2:
+                self.depth = d1
+                return
+            
+            if d2 > d1 and not set:
+                return d2
+            elif d2 > d1:
+                self.depth = d2
+                return
+        else:
+            return nod.depth
+                
     #Derefs everything
     def delete( self ):
         self.root.delete( )
@@ -144,6 +169,9 @@ def swapsubtree( mytree, mysubtree, theirtree, theirsubtree ):
     
     updateSTree( mysubtree, theirtree )
     updateSTree( theirsubtree, mytree )
+    
+    mytree.updateDepth( )
+    theirtree.updateDepth( )
 
 #Recursively UPDATES a Sub TREE's references/depth
 def updateSTree( nod, ntree ):
@@ -154,10 +182,6 @@ def updateSTree( nod, ntree ):
         nod.depth = 0
     else:
         nod.depth = nod.parent.depth + 1
-    
-    #Update tree's depth
-    if nod.depth > nod.tree.depth:
-        nod.tree.depth = nod.depth
     
     #Update both tree's nods
     nod.tree.nodes.append( nod )
