@@ -7,6 +7,8 @@ from agent import agent
 from const import *
 from util import *
 
+from math import floor
+
 import random, tree
 
 class gen:
@@ -77,12 +79,13 @@ class gen:
             self.inds[i].fitness( )
 
     # Select our parents for kids
+    #  Only need half as many parents since each pair has two kids!
     def parentSelection( self ):
         pairs = []
         delprn( "Choosing Parents\t\t", 2 )
         
         if self.partype == FITNESS_PROPORTIONAL:
-            for i in range(0,self.lamb):
+            for i in range(0,floor(self.lamb/2)):
                 pairs.append( probSel( self.inds, 0, 2 ) )
                 delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
         elif self.partype == OVER_SELECTION:
@@ -92,7 +95,7 @@ class gen:
             top = sortedinds[-320:]
             bot = sortedinds[:-320]
             
-            for i in range(0,self.lamb):
+            for i in range(0,floor(self.lamb/2)):
                 pair = []
                 for j in range(0,2):
                     if roll(.8):
@@ -142,7 +145,6 @@ class gen:
             self.inds.append( ind ) 
     
     # Survival selection routine.
-    # FIXME: Only need half as many parents
     def survivalselection( self ):
         delprn( "Survival\t\t", 2 )
         if self.survtype == TRUNCATION:
