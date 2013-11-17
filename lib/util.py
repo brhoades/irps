@@ -260,8 +260,13 @@ class log:
             
         self.cfgStr( fcfg[MAIN], "Main Parameters:" )        
         self.cfgStr( fcfg[AGENT], "Agent Parameters:" )      
-        self.cfgStr( fcfg[INIT], "Initialization Parameters:" )      
-        
+        self.cfgStr( fcfg[GENERATION], "Generation Parameters:" ) 
+        self.cfgStr( fcfg[INIT], "Initialization Parameters:" ) 
+        self.cfgStr( fcfg[PARSEL], "Parent Selection Parameters:" ) 
+        self.cfgStr( fcfg[MUTATE], "Mutation Parameters:" ) 
+        self.cfgStr( fcfg[SURVSEL], "Survival Selection Parameters:" ) 
+        self.cfgStr( fcfg[TERMINATE], "Termination Parameters:" ) 
+
     # Flushes our logs to a file
     def flush( self ):
         self.sol.flush( )
@@ -400,7 +405,7 @@ def renderHead( cfg ):
     else:
         print('Fit #\t', end='')
     
-    print("Avg Fit\tBest Fit\tStatus\t\tPercent")
+    print("Avg Fit\tBest Fit\tStatus\t\t\tPercent")
     
 def pad(num, pad):
     if pad == '0':

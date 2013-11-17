@@ -110,7 +110,7 @@ class gen:
     def recombination( self ):
         parents = self.parentSelection( )
         kids = []
-        delprn( "Makin' Babbies\t\t", 2 )
+        delprn( "Creating Children\t\t", 2 )
         for i in range(0,len(parents)):
             delprn( ''.join([str(perStr( i/self.lamb )), "%"]), 3 )
             pair = parents[i]
