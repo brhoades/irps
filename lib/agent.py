@@ -99,7 +99,6 @@ class agent:
             self.fit -= (self.tree.maxdepth - self.tree.depth) * coeff
             if self.fit < 0:
                 self.fit = 0
-            print( "Penalized!", ( self.tree.maxdepth - self.tree.depth) * coeff )
         
     # Return our structure in preorder
     def serialize( self ):
@@ -120,6 +119,7 @@ class agent:
         
         return ret
     
+    #Mutate oursevles if we have a chance
     def mutate( self ):
         if not util.roll( self.gen.mutaterate ):
             return
@@ -130,6 +130,11 @@ class agent:
         
         if self.tree.root == point:
             self.tree.root = newtree.root
+        else:
+            newtree.root.parent = point.parent
+            #Set our new parent to us
+            newtree.root.parent.children[newtree.root.parent.children.index(point)] = newtree.root
+            
         self.tree.delete( point )
         updateSTree( newtree.root, self.tree )
 

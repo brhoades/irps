@@ -27,21 +27,21 @@ def run( cfg, i, lg, olog ):
         
     generation = gen( cfg )
         
+    prnBase( cfg, i, generation )
+        
+    generation.initialize( )
+        
+    prnBase( cfg, i, generation )
+        
     while generation.fitevals < fitevals:
-        tavg = 0
-        bfit = 0
-        prnBase( cfg, i, generation )
         
-        best = None
-        agnt = None
-        
-        generation.initialize( )
-        
-        prnBase( cfg, i, generation )
-        
+        #Recomb + Mutation
         generation.recombination( )
+        prnBase( cfg, i, generation )
         
-        time.sleep( 5 )
+        #Survival
+        generation.survivalselection( )
+        prnBase( cfg, i, generation )
         
         #if best == None or agnt.fit > best.fit:
             #best = agnt

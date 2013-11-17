@@ -20,7 +20,7 @@ class gen:
         self.lamb = int(cfg[GENERATION][LAMBDA])
         
         self.survtype = cfg[SURVSEL][TYPE]
-        self.survk = cfg[SURVSEL][TOURNAMENT_K]
+        self.survk = int(cfg[SURVSEL][TOURNAMENT_K])
         
         self.method = cfg[INIT][METHOD]
         
@@ -88,8 +88,9 @@ class gen:
         elif self.partype == OVER_SELECTION:
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
             #always choose top 320 individuals according to book
-            top = sortedinds[:320]
-            bot = sortedinds[320:]
+            #list is least to greatest
+            top = sortedinds[-320:]
+            bot = sortedinds[:-320]
             
             for i in range(0,self.lamb):
                 pair = []
@@ -139,9 +140,58 @@ class gen:
         #Just implementing plus for now
         for ind in kids:
             self.inds.append( ind ) 
-            
+    
+    # Survival selection routine.
     def survivalselection( self ):
-        return
+        delprn( "Survival\t\t", 2 )
+        if self.survtype == TRUNCATION:
+            #Just doing plus, so trim it down to mu
+            sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
+            
+            print( sortedinds[0].fit, sortedinds[len(sortedinds)-1].fit )
+            #FIXME: If we don't call delete on these missing ones we're going
+            #  to memleak everywhere. This is sorted worst to best, so grab last mu
+            #  since pop is currently self.lamb + self.mu (FIXME: this breaks comma)
+            #  we grab from lamba on
+            self.inds = sortedinds[self.lamb:]
+            
+        elif self.survtype == K_TOURNAMENT:
+            for i in range(0,self.lamb):
+                #FIXME: See above FIXME
+                self.inds.remove( self.tournament( False, self.survk, i, self.lamb ) )
+
+    # Creates a random tournament and returns a one indivudal
+    #   Disqualified peeps in ineg.
+    def tournament( self, pos=True, size=5, curnum=1, totnum=1, ineg=[] ):
+        parents = random.sample(self.ind, size)
+        once = True
+        while once or len(parents) < size:
+            parents.extend( random.sample(self.ind,size-len(parents)) )
+            for sqr in ineg:
+                if sqr in parents:
+                    parents.remove( sqr )
+            once = False
+            
+        while len(parents) > 1:
+            random.shuffle( parents )
+            plist = parents.copy( )
+            delprn(''.join([perStr(((size-len(parents))/size*(1/totnum))+(curnum/totnum))]), 3)
+            
+            while len(plist) > 1:
+                p1 = plist.pop( )
+                p2 = plist.pop( )
+
+                if p1.fit > p2.fit:
+                    if pos:
+                        parents.remove( p2 )
+                    else:
+                        parents.remove( p1 )
+                else:
+                    if pos:
+                        parents.remove( p1 )
+                    else:
+                        parents.remove( p2 )
+        return parents.pop( )
 
     def average( self ):
         avg = 0

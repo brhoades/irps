@@ -54,7 +54,7 @@ class tree:
     
     def copy( self, other ):
         self.root = node( self, None, leaf=other.root.isLeaf, op=other.root.operator )
-        
+                
         if not self.root.isLeaf:
             self.copynode( self.root, other.root.children[0] )
             self.copynode( self.root, other.root.children[1] )
@@ -110,16 +110,19 @@ class tree:
                 self.populate( method, n )
                 
     #Derefs everything including that node
-    def delete( self, node ):
-        if node == self.root:
+    def delete( self, nod ):
+        if nod == self.root:
             self.root = None
-        node.parent = None
+        nod.parent = None
         
-        if not node.isLeaf:
-            self.delete( node.children[0] )
-            self.delete( node.children[1] )
+        if not nod.isLeaf:
+            self.delete( nod.children[0] )
+            self.delete( nod.children[1] )
         
-        del node.children
+        if nod in self.nodes:
+            self.nodes.remove( nod )
+        
+        nod.children = [1]
     
 #Swaps two subtrees between two trees
 # 1) Dereferences two subtress from their tree.
@@ -137,26 +140,34 @@ def swapsubtree( mytree, mysubtree, theirtree, theirsubtree ):
     theirsubtree.parent = mysubtree.parent
     mysubtree.parent = mypar
     
+    #Set our new parents to their new children
+    if theirsubtree.parent != None:
+        theirsubtree.parent.children[theirsubtree.parent.children.index(mysubtree)] \
+            = theirsubtree
+    if mysubtree.parent != None:
+        mysubtree.parent.children[mysubtree.parent.children.index(theirsubtree)] \
+            = mysubtree
+    
     updateSTree( mysubtree, theirtree )
     updateSTree( theirsubtree, mytree )
 
 #Recursively UPDATES a Sub TREE's references/depth
-def updateSTree( node, ntree ):
-    otree = node.tree
-    node.tree = ntree
+def updateSTree( nod, ntree ):
+    otree = nod.tree
+    nod.tree = ntree
     
-    if node.parent == None:
-        node.depth = 0
+    if nod.parent == None:
+        nod.depth = 0
     else:
-        node.depth = node.parent.depth + 1
+        nod.depth = nod.parent.depth + 1
     
     #Update tree's depth
-    if node.depth > node.tree.depth:
-        node.tree.depth = node.depth
+    if nod.depth > nod.tree.depth:
+        nod.tree.depth = nod.depth
     
-    #Update both tree's nodes
-    node.tree.nodes.append( node )
-    otree.nodes.remove( node )
+    #Update both tree's nods
+    nod.tree.nodes.append( nod )
+    otree.nodes.remove( nod )
     
-    for n in node.children:
+    for n in nod.children:
         updateSTree( n, ntree )
