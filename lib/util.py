@@ -159,7 +159,7 @@ def probSel( ogen, num, adj, neg=False, prn=False ):
     while len(rets) < num:
         if prn:
             delprn(''.join(perStr(len(rets)/num)), 3)
-        pnt = random.randint( 0, cumfit )
+        pnt = random.random( )*cumfit
         
         tfit = 0
         for solu in gen:

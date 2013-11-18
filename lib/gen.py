@@ -86,7 +86,7 @@ class gen:
         
         if self.partype == FITNESS_PROPORTIONAL:
             for i in range(0,floor(self.lamb/2)):
-                pairs.append( probSel( self.inds, 0, 2 ) )
+                pairs.append( probSel( self.inds, 2, 0 ) )
                 delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
         elif self.partype == OVER_SELECTION:
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
@@ -180,7 +180,7 @@ class gen:
             
         while len(parents) > 1:
             random.shuffle( parents )
-            plist = parents.copy( )
+            plist = parents[:]
             delprn(''.join([perStr(((size-len(parents))/size*(1/totnum))+(curnum/totnum))]), 3)
             
             while len(plist) > 1:
