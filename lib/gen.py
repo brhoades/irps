@@ -30,7 +30,7 @@ class gen:
         
         self.mutaterate = float(cfg[MUTATE][MUTATION_RATE])
         
-        self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*len(sortedinds)*-1
+        self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1
         
         self.agent = cfg[AGENT]
         self.main = cfg[MAIN]

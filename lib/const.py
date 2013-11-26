@@ -36,6 +36,7 @@ METHOD = "method"
 #survival and parent selection
 TYPE = "type"
 TOURNAMENT_K = "k"
+OVERSEL_PERCENT = "c"
 
 #mutate
 MUTATION_RATE = "chance"
