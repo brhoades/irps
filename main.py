@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Author: Billy J Rhoades <bjrq48@mst.edu>
-#Class: CS348 Assignment 2b
+#Class: CS348 Assignment 2c
 # Our "main" function that dispatches everything.
 
 #fire up our custom libraries

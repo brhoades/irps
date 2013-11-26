@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Author: Billy J Rhoades <bjrq48@mst.edu>
-#Class: CS348 Assignment 2b
+#Class: CS348 Assignment 2c
 #Our miscellaneous functions that don't depend on any specific classes.
 
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy

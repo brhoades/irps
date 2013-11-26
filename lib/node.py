@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Author: Billy J Rhoades <bjrq48@mst.edu>
-#Class: CS348 Assignment 2b
+#Class: CS348 Assignment 2c
 #This is the file for our node class, which contains per node logic.
 
 import util, random

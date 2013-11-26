@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #Author: Billy J Rhoades <bjrq48@mst.edu>
-#Class: CS348 Assignment 2b
+#Class: CS348 Assignment 2c
 # Contains our base constants used for everything.
 
 #main config sections
