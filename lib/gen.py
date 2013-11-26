@@ -30,6 +30,8 @@ class gen:
         
         self.mutaterate = float(cfg[MUTATE][MUTATION_RATE])
         
+        self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*len(sortedinds)*-1
+        
         self.agent = cfg[AGENT]
         self.main = cfg[MAIN]
         
@@ -90,10 +92,9 @@ class gen:
                 delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
         elif self.partype == OVER_SELECTION:
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
-            #always choose top 320 individuals according to book
-            #list is least to greatest
-            top = sortedinds[-320:]
-            bot = sortedinds[:-320]
+            #Choose top c% individuals
+            top = sortedinds[self.overselnum:]
+            bot = sortedinds[:self.overselnum]
             
             for i in range(0,floor(self.lamb/2)):
                 pair = []
