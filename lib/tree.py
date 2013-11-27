@@ -38,7 +38,7 @@ class tree:
             self.root = node( self, None, leaf=False )
             self.root.operator = self.root.winner
             self.root.children.append( node( self, self.root, op=["O", 0], leaf=False ) )
-            self.root.children.append( node( self, self.root, op=["P", 0], leaf=False ) )
+            self.root.children.append( node( self, self.root, ["P", 0], leaf=False ) )
         
     def __str__( self ):
         ret = ""
@@ -170,9 +170,6 @@ def swapsubtree( mytree, mysubtree, theirtree, theirsubtree ):
     updateSTree( mysubtree, theirtree )
     updateSTree( theirsubtree, mytree )
     
-    resetRes( mysubtree, True )
-    resetRes( theirsubtree, True )
-    
     mytree.updateDepth( )
     theirtree.updateDepth( )
 
@@ -192,12 +189,3 @@ def updateSTree( nod, ntree ):
     
     for n in nod.children:
         updateSTree( n, ntree )
-
-#Forces a node's parents to recursively update
-def resetRes( nod, first=False ):
-    if first and nod.parent != None:
-        resetRes( nod.parent )
-    else:
-        nod.res = None
-        if nod.parent != None:
-            resetRes( nod.parent )

@@ -17,9 +17,6 @@ class node:
         #leaf or node
         self.isLeaf = args["leaf"]
         
-        #resolution cache, none == update
-        self.res = None
-        
         #Set these for copy recognition
         self.winner.__dict__["type"] = "winner"
         self.other.__dict__["type"] = "other"
@@ -96,7 +93,10 @@ class node:
         
         for i in range(0,2):
             #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
-            cres.append( self.children[i].resolve( ) )
+            if self.children[i].isLeaf:
+                cres.append( self.children[i].lookup( ) )
+            else:
+                cres.append( self.children[i].operator( ) )
             
         return cres
       
@@ -136,13 +136,3 @@ class node:
         self.op = None
         
         self.children = [1]
-        
-    #Gives whatever our resolution is to the caller
-    def resolve( self ):
-        if self.res == None:
-            if self.isLeaf:
-                self.res = self.lookup( )
-            else:
-                self.res = self.operator( )
-
-        return self.res
