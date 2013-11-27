@@ -37,6 +37,7 @@ METHOD = "method"
 TYPE = "type"
 TOURNAMENT_K = "k"
 OVERSEL_PERCENT = "c"
+STRATEGY = "strat"
 
 #mutate
 MUTATION_RATE = "chance"
@@ -50,6 +51,10 @@ FITNESS_PROPORTIONAL = "0"
 OVER_SELECTION = "1"
 TRUNCATION = "0"
 K_TOURNAMENT = "2"
+
+#Strategy types
+COMMA = "0"
+PLUS = "1"
 
 #Termination shit
 NUM_OF_FITEVALS = "0"

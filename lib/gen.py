@@ -21,6 +21,8 @@ class gen:
         self.mu = int(cfg[GENERATION][MU])
         self.lamb = int(cfg[GENERATION][LAMBDA])
         
+        self.strat = cfg[SURVSEL][STRATEGY]
+        
         self.survtype = cfg[SURVSEL][TYPE]
         self.survk = int(cfg[SURVSEL][TOURNAMENT_K])
         
@@ -34,6 +36,18 @@ class gen:
         
         self.agent = cfg[AGENT]
         self.main = cfg[MAIN]
+        
+        #Determine the constant amount to remove each survival selection
+        if self.strat == PLUS:
+            if self.mu < self.lamb:
+                self.survivalamount = 0 #population explodes forever
+            else:
+                self.survivalamount = self.lamb #typical case
+        elif self.strat == COMMA:
+            if self.mu <= self.lamb: 
+                self.survivalamount = self.lamb - self.mu #typical case
+            elif self.mu > self.lamb:
+                self.survivalamount = 0 #population dies
         
         #Our internal counter for fitness evaluations
         self.fitevals = 0
@@ -148,21 +162,20 @@ class gen:
     # Survival selection routine.
     def survivalselection( self ):
         delprn( "Survival\t\t", 2 )
+            
         if self.survtype == TRUNCATION:
-            #Just doing plus, so trim it down to mu
+            #NOTE: Sorts from worst to greatest
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
             
-            #This is sorted worst to best, so grab last mu
-            #  since pop is currently self.lamb + self.mu (FIXME: this breaks comma)
-            #  we grab from lamba on
-            self.inds = sortedinds[self.lamb:]
-            dead = sortedinds[:self.lamb]
-            
-            while len(dead) > 0:
-                dead.pop( ).delete( )
+            #Since we're bringing pop back down to self.mu, do the last mu elements
+            #Does both comma and lambda 
+            self.inds = sortedinds[self.survivalamount:]
+            for ind in sortedinds:
+                if ind not in self.inds:
+                    ind.delete( )
                 
         elif self.survtype == K_TOURNAMENT:
-            for i in range(0,self.lamb):
+            for i in range(0,self.survivalamount):
                 dead = self.tournament( False, self.survk, i, self.lamb )
                 self.inds.remove( dead )
                 dead.delete( )
