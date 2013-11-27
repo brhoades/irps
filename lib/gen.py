@@ -34,6 +34,8 @@ class gen:
         
         self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1
         
+        self.coefsp = float(self.cfg[AGENT][COEV_FIT_SAMPLE_PERCENT])
+        
         self.agent = cfg[AGENT]
         self.main = cfg[MAIN]
         

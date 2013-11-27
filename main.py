@@ -25,9 +25,6 @@ def main():
     
     random.seed(cseed)
     
-    if cfg[MAIN][OPP] != "0":
-        util.loadCSV(cfg[MAIN][OPP])
-    
     lg = util.log( cfg, cseed, util.gcfg( ) )
     best = None
     util.renderHead( cfg )

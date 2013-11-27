@@ -68,18 +68,12 @@ class agent:
     # Our fitness, just an average of our payloads
     #   However we need to run our competition a few times
     def fitness( self ):
-        #FIXME: hacked in
-        otype = self.gen.cfg[MAIN][OPP] 
+        #FIXME: Implement CoEV
+        ores = "S"
         
         for j in range(0,self.gen.seqs):
-            ores = -2
-            if otype == "0":
-                ores = util.victor( self.tmoves[0], self.mymoves[0] )
-            else:
-                ores = util.CSVAI( self.tmoves, self.mymoves )
-            
+            ores = -2 
             myres = self.run( )
-            
             self.upres( myres, ores )
             
         sum = 0

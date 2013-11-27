@@ -19,12 +19,12 @@ DEPTH = "d"
 MEM = "k"
 PAYOFF = "payoff"
 PARSIMONY_PRESSURE_COEFF = "ppcoeff"
+COEV_FIT_SAMPLE_PERCENT = "coevfsp"
 
 #main
 SEED = "seed"
 SEQRUNS = "l"
 RUNS = "runs"
-OPP = "opp"
 
 #gen
 MU = "mu"
