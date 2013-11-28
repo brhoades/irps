@@ -34,10 +34,26 @@ class gen:
         
         self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1
         
-        self.coefsp = float(self.cfg[AGENT][COEV_FIT_SAMPLE_PERCENT])
         
         self.agent = cfg[AGENT]
         
+        self.coefsp = float(self.cfg[AGENT][COEV_FIT_SAMPLE_PERCENT])
+        
+        maxpercent = (self.mu+self.lamb-1)/(self.mu+self.lamb)
+        minpercent = 1/(self.mu+self.lamb-1)
+        
+        if self.coefsp < minpercent:
+            self.coefsp = minpercent
+            self.coefnum = floor( minpercent * ( self.mu + self.lamb ) )
+            warn( "Coevolutionary Fitness Sampling Percentage too small, setting to min:", minpercent, "or", self.coefnum, "individuals" )
+        elif self.coefsp > maxpercent:
+            self.coefsp = maxpercent
+            self.coefnum = floor( maxpercent * ( self.mu + self.lamb ) )
+            warn( "Coevolutionary Fitness Sampling Percentage too large, setting to max:", maxpercent, "or", self.coefnum, "individuals" )
+        else:
+            self.coefnum = floor( self.coefsp * ( self.mu + self.lamb ) )
+        
+        #Cap fitness at > 4
         self.agent[MEM] = int(self.agent[MEM])
         if self.agent[MEM] < 4:
             warn("agent memory was below 4 (", self.agent[MEM], "), will be automatically " \
