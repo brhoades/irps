@@ -38,7 +38,7 @@ class node:
         self.depth = 0
         if self.parent != None:
             self.depth = self.parent.depth + 1
-        elif self.tree.root == None:
+        elif self.tree.root == None or self == self.tree.root:
             self.depth = 0
         else:
             raise ReferenceError("Dangling node with no parent")
@@ -77,7 +77,7 @@ class node:
     def other( self ):
         cres = self.getCRes( )
         
-        ops = [moves.ROCK, moves.SCISSORS, moves.PAPER]
+        ops = OPS[:]
         for c in cres:
             if c in ops:
                 ops.remove(c)
@@ -105,9 +105,9 @@ class node:
         type, index = self.operator
         lu = None
         
-        #Types could be P or could be O. If it's P we look at our previous moves. If it's O we look
+        #Types could be "P" or could be "O". If it's "P" we look at our previous moves. If it's "O" we look
         #  at theirs.
-        if type == "O":
+        if type == srctype.OPPONENT:
             lu = self.tree.agent.tmoves
         else:
             lu = self.tree.agent.mymoves

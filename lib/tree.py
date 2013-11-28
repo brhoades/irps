@@ -8,7 +8,7 @@ from node import node
 from const import *
 
 class tree:
-    def __init__( self, agent, maxdepth, method, type="evolve" ):
+    def __init__( self, agent, maxdepth, method ):
         self.agent = agent
         
         self.meth = method
@@ -26,20 +26,12 @@ class tree:
         #Our children update our depth as they're added
         self.depth = 0
         
-        if type == "evolve":
-            #We do grow, randomly if "half and half"
-            if ( self.meth == HALFANDHALF and util.flip( ) ) or self.meth == GROW:
-                self.populate( GROW )
-            else: #Otherwise we do full initialization
-                self.populate( FULL )
-        elif type == "lastwin":
-            #Drop a simple tree here that always chooses last winner
-            #Our memory is a queue where [0] is the latest
-            self.root = node( self, None, leaf=False )
-            self.root.operator = self.root.winner
-            self.root.children.append( node( self, self.root, op=["O", 0], leaf=False ) )
-            self.root.children.append( node( self, self.root, ["P", 0], leaf=False ) )
-        
+        #We do grow, randomly if "half and half"
+        if ( self.meth == HALFANDHALF and util.flip( ) ) or self.meth == GROW:
+            self.populate( GROW )
+        else: #Otherwise we do full initialization
+            self.populate( FULL )
+            
     def __str__( self ):
         ret = ""
         
@@ -53,6 +45,7 @@ class tree:
         return ret
     
     def copy( self, other ):
+        self.root = None
         self.root = node( self, None, leaf=other.root.isLeaf, op=other.root.operator, copy=True )
                 
         if not self.root.isLeaf:
@@ -77,14 +70,14 @@ class tree:
     
     # Randomly return a terminal
     def randomTerm( self ):
-        term = []
+        player = None
         if util.flip( ):
-            term.append("O")
+            player = srctype.OPPONENT
         else:
-            term.append("P")
+            player = srctype.PLAYER
         
         #-1 here since this will reference our list blindly
-        term.append(random.randint(0,self.agent.mem-1))
+        term = (player,random.randint(0,self.agent.mem-1),)
         return term
     
     # Pass the node whose children we're populating and, depending on that node's depth, we'll populate kids for it

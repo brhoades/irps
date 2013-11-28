@@ -75,6 +75,13 @@ class moves:
     PAPER=1
     SCISSORS=2
     MAXMOVE=2
+
+OPS = [moves.ROCK, moves.SCISSORS, moves.PAPER]
+
+#Source Type
+class srctype:
+    OPPONENT=0
+    PLAYER=1
     
 class payoffs:
     LOSS=-1

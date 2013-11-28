@@ -27,11 +27,9 @@ class agent:
             self.mem = 4
         
         if not "copy" in args:
-            if not type in args:
-                args["type"] = "evolve"
-            self.tree = tree( self, int(self.gen.agent[DEPTH]), self.gen.method, args["type"] )
+            self.tree = tree( self, int(self.gen.agent[DEPTH]), self.gen.method )
         else:
-            self.tree = tree( self, int(self.gen.agent[DEPTH]), None, "copy" )
+            self.tree = tree( self, int(self.gen.agent[DEPTH]), None )
             self.tree.copy( args["copy"].tree )
         
         self.fit = 0
@@ -72,7 +70,7 @@ class agent:
         ores = "S"
         
         for j in range(0,self.gen.seqs):
-            ores = -2 
+            ores = 1
             myres = self.run( )
             self.upres( myres, ores )
             
@@ -103,7 +101,10 @@ class agent:
         ret = ""
         
         if cur.isLeaf:
-            ret += ''.join([cur.operator[0], str(cur.operator[1]), " "])
+            p1 = "O"
+            if cur.operator[0] != srctype.OPPONENT:
+                p1 = "P"
+            ret += ''.join([p1, str(cur.operator[1]), " "])
         else:
             ret += ''.join([cur.operator.__name__, " "])
         
@@ -120,7 +121,7 @@ class agent:
         
         point = random.sample(self.tree.nodes, 1)[0]
         
-        newtree = tree( self, int(self.tree.maxdepth), "grow", "evolve" )
+        newtree = tree( self, int(self.tree.maxdepth), "grow" )
         
         if self.tree.root == point:
             self.tree.root = newtree.root

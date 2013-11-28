@@ -8,10 +8,6 @@ from const import *
 
 # Returns the winner of the two in a RPS contest
 def victor( m1, m2 ):
-    #Need to do this due to some type issues with reading the CSV
-    m1 = int(m1)
-    m2 = int(m2)
-    
     if m1 == m2:
         return m1
     
@@ -30,7 +26,7 @@ def victor( m1, m2 ):
     if m1 == moves.SCISSORS and m2 == moves.ROCK:
         return m2
      
-    raise TypeError( "Somehow I missed a combination.", tauriTran( m1 ), tauriTran( m2 ) )
+    raise TypeError( "Somehow I missed a combination.", m1, m2 )
 
 
 #Fitness related
@@ -87,18 +83,14 @@ def seed( ):
 
 # "Roll" a 100 sided die and compares it to chance%.
 def roll( chance ):
-    if( random.uniform(0, 100) <= chance*100 ):
+    if( random.random( ) < chance ):
         return True
         
     return False
 # "Flip" a coin uniformly. Since Python's random is uniform this works.
 def flip( ):
-    prob = random.uniform(0, 1)
-    return prob >= 0.5 #in [a,b], b is often not included due to floating point rounding, so >=
-
-# Returns a chance between 1 - 1M
-def chance( ):
-    return random.randint( 1, 1000000 )
+    prob = random.random( )
+    return prob >= 0.5 #in [a,b), so >=
 
 ######################################
 # Config-parsing functions / logging functions
@@ -111,7 +103,7 @@ def readConfig( fn ):
 
 # Called before readConfig to parse command line options or return the default.
 def gcfg( ):
-    parser = argparse.ArgumentParser(description='CS348 FS2013 Assignment 2')
+    parser = argparse.ArgumentParser(description='CS348 FS2013 Assignment 2c')
     parser.add_argument('-c', type=str,
                         help='Specifies a configuration file (default: cfg/default.cfg)',
     default="cfg/default.cfg")
