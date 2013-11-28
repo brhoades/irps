@@ -37,11 +37,27 @@ class gen:
         self.coefsp = float(self.cfg[AGENT][COEV_FIT_SAMPLE_PERCENT])
         
         self.agent = cfg[AGENT]
+        
+        self.agent[MEM] = int(self.gen.agent[MEM])
+        if self.agent[MEM] < 4:
+            warn("agent memory was below 4 (", self.agent[MEM], "), will be automatically " \
+                     "adjusted to 4.")
+            self.agent[MEM] = 4
+        
         self.main = cfg[MAIN]
+        
+        
+        #number of sequences for a fitness evaluation
+        self.seqs = int(cfg[MAIN][SEQRUNS])
+        if self.seqs < 3*int(cfg[AGENT][MEM]):
+            warn("number of agent sequences must be >=", (3*cfg[AGENT][MEM]), ", it will be " \
+                    "automatically adjusted."
+            self.seqs = 3*int(cfg[AGENT][MEM])
         
         #Determine the constant amount to remove each survival selection
         if self.strat == PLUS:
             if self.mu < self.lamb:
+                warn("population will continuosly grow.")
                 self.survivalamount = 0 #population explodes forever
             else:
                 self.survivalamount = self.lamb #typical case
@@ -49,6 +65,7 @@ class gen:
             if self.mu <= self.lamb: 
                 self.survivalamount = self.lamb - self.mu #typical case
             elif self.mu > self.lamb:
+                warn("population will decrease to zero.")
                 self.survivalamount = 0 #population dies
         
         #Our internal counter for fitness evaluations
@@ -74,11 +91,6 @@ class gen:
         self.pofftable[moves.SCISSORS].append(tpv[7])
         self.pofftable[moves.SCISSORS].append(tpv[8])
         ###################DONE WITH STUPID TABLE###################
-        
-        #number of sequences for a fitness evaluation
-        self.seqs = int(cfg[MAIN][SEQRUNS])
-        if self.seqs < 3*int(cfg[AGENT][MEM]):
-            self.seqs = 3*int(cfg[AGENT][MEM])
         
     # Set up our inital population
     def initialize( self ):

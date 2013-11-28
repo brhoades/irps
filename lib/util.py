@@ -6,6 +6,10 @@
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
 from const import *
 
+# Warns the user via the command line interface
+def warn( text ):
+    print( "WARNING:", text )
+
 # Returns the winner of the two in a RPS contest
 def victor( m1, m2 ):
     if m1 == m2:
