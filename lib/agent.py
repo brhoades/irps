@@ -66,9 +66,7 @@ class agent:
     # Our fitness, just an average of our payloads
     #   However we need to run our competition a few times
     def fitness( self ):
-        #FIXME: Implement CoEV
-        ores = "S"
-        
+        #FIXME: Implement CoEV        
         for j in range(0,self.gen.seqs):
             ores = 1
             myres = self.run( )
@@ -123,15 +121,13 @@ class agent:
         
         newtree = tree( self, int(self.tree.maxdepth), "grow" )
         
-        if self.tree.root == point:
-            self.tree.root = newtree.root
-        else:
-            newtree.root.parent = point.parent
-            #Set our new parent to us
-            newtree.root.parent.children[newtree.root.parent.children.index(point)] = newtree.root
-            
+        swapsubtree( self.tree, point, newtree, newtree.root )
+
+        point.parent = None
+        
         point.delete( )
-        updateSTree( newtree.root, self.tree )
+        
+        #Fitness is calculated in recombine
 
     def delete( self ):
         self.gen = None

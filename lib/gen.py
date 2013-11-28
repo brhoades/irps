@@ -38,7 +38,7 @@ class gen:
         
         self.agent = cfg[AGENT]
         
-        self.agent[MEM] = int(self.gen.agent[MEM])
+        self.agent[MEM] = int(self.agent[MEM])
         if self.agent[MEM] < 4:
             warn("agent memory was below 4 (", self.agent[MEM], "), will be automatically " \
                      "adjusted to 4.")
@@ -49,10 +49,10 @@ class gen:
         
         #number of sequences for a fitness evaluation
         self.seqs = int(cfg[MAIN][SEQRUNS])
-        if self.seqs < 3*int(cfg[AGENT][MEM]):
+        if self.seqs < 3*cfg[AGENT][MEM]:
             warn("number of agent sequences must be >=", (3*cfg[AGENT][MEM]), ", it will be " \
-                    "automatically adjusted."
-            self.seqs = 3*int(cfg[AGENT][MEM])
+                    "automatically adjusted.")
+            self.seqs = 3*cfg[AGENT][MEM]
         
         #Determine the constant amount to remove each survival selection
         if self.strat == PLUS:
@@ -169,10 +169,14 @@ class gen:
             kids.append(kid1)
             kids.append(kid2)
             
-        #Just implementing plus for now
-        for ind in kids:
-            self.inds.append( ind ) 
-    
+        if self.strat == PLUS:
+            for ind in kids:
+                self.inds.append( ind ) 
+        elif self.strat == COMMA:
+            for ind in self.inds:
+                ind.delete( )
+            self.inds = kids
+            
     # Survival selection routine.
     def survivalselection( self ):
         delprn( "Survival\t\t", 2 )
