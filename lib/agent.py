@@ -34,10 +34,8 @@ class agent:
         
         self.fit = 0
         
-        for i in range(self.mem):
-            self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
-            self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
-    
+        self.clrMemory( )
+        
     # Run our GP and return our choice. We do our own memory except for the payoff / tmoves, which is done by
     #   upres.
     def run( self ):
@@ -56,21 +54,41 @@ class agent:
     
     # Update our memory for them and our payload
     # UPdates our RESults
-    def upres( self, res, opp ):
-        self.payoffs.append(self.gen.pofftable[int(opp)][int(res)])
+    def upres( self, res, opp, justMem=False ):
+        if not justMem:
+            self.payoffs.append(self.gen.pofftable[int(opp)][int(res)])
         
         #Update our memory for them
         del self.tmoves[self.mem-1]
         self.tmoves.insert(0, opp)
         
+    # Clears our internal memory
+    def clrMemory( self ):
+        self.mymoves = []
+        self.tmoves = []
+        for i in range(self.mem):
+            self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
+            self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
+    
+    
     # Our fitness, just an average of our payloads
     #   However we need to run our competition a few times
+    #   All payoffs are cleared at the beginning of a generation (in plus)
+    #   We will use payoffs given from other rounds to save time.
     def fitness( self ):
-        #FIXME: Implement CoEV        
-        for j in range(0,self.gen.seqs):
-            ores = 1
-            myres = self.run( )
-            self.upres( myres, ores )
+        numtogo = self.gen.coefnum - len( self.payoffs )
+        if numtogo > 0:
+            opponents = random.sample(self.gen.inds, numtogo)
+            beforepayoff = self.mem * 2
+            
+            for opp in opponents:
+                opp.clrMemory( )
+                self.clrMemory( )
+                for i in range(self.gen.seqs):                
+                    ores = opp.run( )
+                    myres = self.run( )
+                    self.upres( myres, ores, ( i > beforepayoff ) )
+                    opp.upres( ores, myres, ( i > beforepayoff ) )
             
         sum = 0
         for i in self.payoffs:

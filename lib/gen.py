@@ -34,7 +34,6 @@ class gen:
         
         self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1
         
-        
         self.agent = cfg[AGENT]
         
         self.coefsp = float(self.cfg[AGENT][COEV_FIT_SAMPLE_PERCENT])
@@ -61,7 +60,6 @@ class gen:
             self.agent[MEM] = 4
         
         self.main = cfg[MAIN]
-        
         
         #number of sequences for a fitness evaluation
         self.seqs = int(cfg[MAIN][SEQRUNS])
@@ -178,10 +176,6 @@ class gen:
             kid1.mutate( )
             kid2.mutate( )
             
-            #Determine fitness
-            kid1.fitness( )
-            kid2.fitness( )
-            
             kids.append(kid1)
             kids.append(kid2)
             
@@ -195,8 +189,23 @@ class gen:
             
     # Survival selection routine.
     def survivalselection( self ):
-        delprn( "Survival\t\t", 2 )
+        if self.strat == COMMA:
+            delprn( "Reevaluating Fitness\t", 2 )
+        else:
+            delprn( "Evaluating Fitness\t", 2 )
             
+        for ind in self.inds:
+            ind.fit = 0
+            ind.payoffs = []
+        
+        delprn( "0", 3 )
+        
+        for i in range(len(self.inds)):
+            delprn( str(perStr( i/len(self.inds) )), 3 )
+            ind.fitness( )
+            
+        delprn( "Survival\t\t", 2 )
+
         if self.survtype == TRUNCATION:
             #NOTE: Sorts from worst to greatest
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)

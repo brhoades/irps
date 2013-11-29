@@ -37,7 +37,6 @@ def run( cfg, i, lg ):
         generation.survivalselection( )
         prnBase( cfg, i, generation )
         
-
     lg.entry(generation)
     
     #delicately extract the best from the generation
