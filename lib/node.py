@@ -85,7 +85,7 @@ class node:
         if len(ops) == 1:
             return ops[0]
         
-        return random.sample(ops, 1)[0]
+        return ops[random.randint(0,1)]
         
     # Gets the resulting rock, paper, or scissors results from all children        
     def getCRes( self ):

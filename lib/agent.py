@@ -56,7 +56,7 @@ class agent:
     # UPdates our RESults
     def upres( self, res, opp, justMem=False ):
         if not justMem:
-            self.payoffs.append(self.gen.pofftable[int(opp)][int(res)])
+            self.payoffs.append(self.gen.pofftable[opp][res])
         
         #Update our memory for them
         del self.tmoves[self.mem-1]
@@ -82,8 +82,6 @@ class agent:
             beforepayoff = self.mem * 2
             
             for opp in opponents:
-                opp.clrMemory( )
-                self.clrMemory( )
                 for i in range(self.gen.seqs):                
                     ores = opp.run( )
                     myres = self.run( )

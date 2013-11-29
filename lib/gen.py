@@ -142,9 +142,9 @@ class gen:
                 pair = []
                 for j in range(0,2):
                     if roll(.8):
-                        pair.append(random.sample(top,1)[0])
+                        pair.append(top[random.randint(0,len(top))])
                     else:
-                        pair.append(random.sample(bot,1)[0])
+                        pair.append(bot[random.randint(0,len(bot))])
                 pairs.append(pair)
                 delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
         return pairs
