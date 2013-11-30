@@ -89,16 +89,21 @@ class node:
         
     # Gets the resulting rock, paper, or scissors results from all children        
     def getCRes( self ):
-        cres = []
+        cres1 = None
+        cres2 = None
         
-        for i in range(0,2):
-            #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
-            if self.children[i].isLeaf:
-                cres.append( self.children[i].lookup( ) )
-            else:
-                cres.append( self.children[i].operator( ) )
+        #If child is a leaf, just perform a simple lookup for the outcome. Otherwise call its function.
+        if self.children[0].isLeaf:
+            cres1 = self.children[0].lookup( )
+        else:
+            cres1 = self.children[0].operator( )
             
-        return cres
+        if self.children[1].isLeaf:
+            cres2 = self.children[1].lookup( )
+        else:
+            cres2 = self.children[1].operator( )
+                        
+        return (cres1,cres2,)
       
     # "Looks up" in our memory what our operator looks for, when we are a leaf
     def lookup( self ):

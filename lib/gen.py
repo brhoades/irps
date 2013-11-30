@@ -201,8 +201,8 @@ class gen:
         delprn( "0", 3 )
         
         for i in range(len(self.inds)):
-            delprn( str(perStr( i/len(self.inds) )), 3 )
             ind.fitness( )
+            delprn( str(perStr( i/len(self.inds) )), 3 )
             
         delprn( "Survival\t\t", 2 )
 
