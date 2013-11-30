@@ -80,7 +80,7 @@ def roll( chance ):
 # "Flip" a coin uniformly. Since Python's random is uniform this works.
 def flip( ):
     prob = random.random( )
-    return prob >= 0.5 #in [a,b), so >=
+    return prob >= 0.5 #in [0,1), so >=
 
 ######################################
 # Config-parsing functions / logging functions
