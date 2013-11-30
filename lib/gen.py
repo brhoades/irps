@@ -179,6 +179,7 @@ class gen:
                 ind.delete( )
             self.inds = kids
             
+    # Evaluate our fitness at the end of recombination
     def reevalFitness( self ):
         if self.strat == PLUS:
             delprn( "Reevaluating Fitness\t", 2 )
@@ -186,8 +187,7 @@ class gen:
             delprn( "Evaluating Fitness\t", 2 )
             
         for ind in self.inds:
-            ind.fit = 0
-            ind.payoffs = []
+            ind.payoffs.clear( )
         
         delprn( "0", 3 )
         

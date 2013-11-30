@@ -7,25 +7,27 @@ import util, random
 from node import node
 from tree import *
 from const import *
+from collections import deque
 
 class agent:
     def __init__( self, gen, **args ):        
         #Our parent generation
         self.gen = gen
         
+        #A temporary pointer to our opponent's memory
+        self.tmoves = None
+        
         #Store our individual payoffs for each sequence, ordered
         self.payoffs = []
-        
-        #Store our moves on each sequence, ordered
-        self.mymoves = []
-        
-        #Store Their MOVES on each sequence, ordered
-        self.tmoves = []
         
         self.mem = int(self.gen.agent[MEM])
         if self.mem < 4:
             self.mem = 4
         
+        #Store our moves on each sequence, ordered
+        # Create some random noise for the first sequence
+        self.mymoves = deque( [random.randint(moves.MINMOVE, moves.MAXMOVE) for i in range(self.mem)], self.mem )
+                
         if not "copy" in args:
             self.tree = tree( self, int(self.gen.agent[DEPTH]), self.gen.method )
         else:
@@ -34,44 +36,29 @@ class agent:
         
         self.fit = 0
         
-        self.clrMemory( )
-        
     # Run our GP and return our choice. We do our own memory except for the payoff / tmoves, which is done by
     #   upres.
-    def run( self ):
+    def run( self, tmoves ):
         res = -2
+        self.tmoves = tmoves
+        
         if self.tree.root.isLeaf:
             res=self.tree.root.lookup( )
         else:
             res=self.tree.root.operator( )
-            
-        #Update our memory
-        #Our memory is a LIFO where [0] is the latest and [k-1] is the oldest, k turns ago
-        del self.mymoves[self.mem-1]
-        self.mymoves.insert(0, res)
+        
+        #Put this back for later
+        self.tmoves = None
         
         return res
     
-    # Update our memory for them and our payload
-    # UPdates our RESults
-    def upres( self, res, opp, justMem=False ):
-        if not justMem:
-            self.payoffs.append(self.gen.pofftable[opp][res])
+    # Update our payload
+    def upres( self, res, opp ):
+        self.payoffs.append(self.gen.pofftable[opp][res])
         
-        #Update our memory for them
-        del self.tmoves[self.mem-1]
-        self.tmoves.insert(0, opp)
-        
-    # Clears our internal memory
-    def clrMemory( self ):
-        self.mymoves = []
-        self.tmoves = []
-        for i in range(self.mem):
-            self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
-            self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
-            
-        self.payoffs = []
-    
+        #Update our memory
+        #Our memory is a LIFO where [0] is the latest and [k-1] is the oldest, k turns ago
+        self.mymoves.appendleft(res)
     
     # Our fitness, just an average of our payloads
     #   However we need to run our competition a few times
@@ -85,10 +72,11 @@ class agent:
             
             for opp in opponents:
                 for i in range(self.gen.seqs):                
-                    ores = opp.run( )
-                    myres = self.run( )
-                    self.upres( myres, ores, ( i > beforepayoff ) )
-                    opp.upres( ores, myres, ( i > beforepayoff ) )
+                    ores = opp.run( self.mymoves )
+                    myres = self.run( opp.mymoves )
+                    if i > beforepayoff:
+                        self.upres( myres, ores )
+                        opp.upres( ores, myres )
 
         sum = 0
         for i in self.payoffs:
