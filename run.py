@@ -43,6 +43,8 @@ def run( cfg, i, lg ):
     
     #delicately extract the best from the generation
     best = generation.best( )
+    lg.spacer( best )
+
     generation.delete( best )
     best.gen = None
         

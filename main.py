@@ -35,7 +35,6 @@ def main():
         eagt=run(cfg, i, lg)
         if best == None or eagt.fit > best.fit:
             best = eagt
-        lg.spacer( )
     lg.best(best)
     lg.wrapUp(best)
     

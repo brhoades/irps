@@ -5,6 +5,7 @@
 
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
 from const import *
+from collections import deque
 
 # Warns the user via the command line interface
 def warn( text ):
@@ -277,9 +278,42 @@ class log:
     def entry( self, gen ):
         self.res.write( ''.join( [ str(gen.fitevals), "\t", str(gen.average( )), "\t", str(gen.best( ).fit), "\n" ] ) )
     
-    # Our generational best
-    def spacer( self ):
+    # Print our absolute fitness for our bests
+    # basically reverse engineering fitness + logging + run
+    def spacer( self, best ):
+        fits = []
+        regfit = best.fit
+        
         self.res.write( "=SPACER=\n" )
+        self.res.write( "\nAbsolute Fitness\n" )
+        
+        for i in range(0,2):
+            tmoves = deque( [random.randint(moves.MINMOVE, moves.MAXMOVE) for i in range(best.mem)], best.mem )
+            beforepayoff = best.mem * 2
+            best.fit = 0
+            best.payoffs = []
+            for j in range(0,best.gen.seqs):
+                ores = -2
+                if i == 0:
+                    ores = victor( tmoves[0], best.mymoves[0] )
+                else:
+                    ores = CSVAI( tmoves, best.mymoves )
+                
+                tmoves.appendleft( ores )
+                myres = best.run( tmoves )
+                
+                if j > beforepayoff:
+                    best.upres( myres, ores )
+            
+            sum = 0
+            for pay in best.payoffs:
+                sum += pay
+            sum /= len(best.payoffs)
+            
+            fits.append( sum )
+        best.fit = regfit
+
+        self.res.write( str(fits[0]) + "\n" + str(fits[1]) + "\n" )
         
     # Do our initial variable sub
     def processDirs( self ):
