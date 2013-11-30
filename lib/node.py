@@ -58,30 +58,32 @@ class node:
     
     # Winner returns the winner constant between our children
     def winner( self ):
-        cres = self.getCRes( )
+        cres1, cres2 = self.getCRes( )
         
-        return util.victor(cres[0], cres[1])
+        return util.victor(cres1, cres2)
     
     # Loser returns the losing constant between our children
     def loser( self ):
-        cres = self.getCRes( )
+        cres1, cres2 = self.getCRes( )
 
         #return the LOSER, so the one that's not the victor
-        if util.victor(cres[0], cres[1]) == cres[0]:
-            return cres[1]
+        if util.victor(cres1, cres2) == cres1:
+            return cres2
         
-        return cres[0]
+        return cres1
         
     # Other returns the OTHER option between the two children. If there's more
     #   than one other, it returns a random one of the two.
     def other( self ):
-        cres = self.getCRes( )
+        cres1, cres2 = self.getCRes( )
         
         ops = OPS[:]
-        for c in cres:
-            if c in ops:
-                ops.remove(c)
-        
+        if cres1 in ops:
+            ops.remove(cres1)
+    
+        if cres2 in ops:
+            ops.remove(cres2)
+    
         if len(ops) == 1:
             return ops[0]
         
@@ -103,7 +105,7 @@ class node:
         else:
             cres2 = self.children[1].operator( )
                         
-        return (cres1,cres2,)
+        return cres1, cres2
       
     # "Looks up" in our memory what our operator looks for, when we are a leaf
     def lookup( self ):
