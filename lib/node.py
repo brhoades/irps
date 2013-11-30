@@ -22,8 +22,11 @@ class node:
         self.other.__dict__["type"] = "other"
         self.loser.__dict__["type"] = "loser"
         
-        # our operation. If we're a leaf this is a list with P/O on the first spot, and a number following. 
-        # If this is a node it's a function ref
+        #List of operator references
+        self.ops = (self.winner, self.loser, self.other,)
+        
+        #Our operation. If we're a leaf this is a list with P/O on the first spot, and a number following. 
+        #  If this is a node it's a function ref
         if not "op" in args and not args["leaf"]:
             self.operator = self.randomOp( )
         elif not args["leaf"] and "copy" in args:
@@ -47,14 +50,7 @@ class node:
     
     # Gives us a random operator reference
     def randomOp( self ):
-        rint = random.randint(0,2)
-        
-        if rint == 0:
-            return self.winner
-        elif rint == 1:
-            return self.loser
-        
-        return self.other
+        return self.ops[random.randint(0,2)]
     
     # Winner returns the winner constant between our children
     def winner( self ):
