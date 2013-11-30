@@ -93,17 +93,9 @@ class gen:
             tpv[i] = float(tpv[i])
         #opponentplayer => res value
         #rr,rp,rs,pr,pp,ps,sr,sp,ss
-        self.pofftable[moves.ROCK].append(tpv[0])
-        self.pofftable[moves.ROCK].append(tpv[1])
-        self.pofftable[moves.ROCK].append(tpv[2])
-
-        self.pofftable[moves.PAPER].append(tpv[3])
-        self.pofftable[moves.PAPER].append(tpv[4])
-        self.pofftable[moves.PAPER].append(tpv[5])
-        
-        self.pofftable[moves.SCISSORS].append(tpv[6])
-        self.pofftable[moves.SCISSORS].append(tpv[7])
-        self.pofftable[moves.SCISSORS].append(tpv[8])
+        self.pofftable = ((tpv[0],tpv[1],tpv[2],),     #rockvrock, rockvpaper, rockvscissors
+                            (tpv[3],tpv[4],tpv[5],),     #papervrock, papervpaper, papervscissors
+                            (tpv[6],tpv[7],tpv[8],),)    #scissorsvrock, scissorsvpaper, scissorsvscissors
         ###################DONE WITH STUPID TABLE###################
         
     # Set up our inital population
