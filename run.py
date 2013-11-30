@@ -33,6 +33,8 @@ def run( cfg, i, lg ):
         generation.recombination( )
         #prnBase( cfg, i, generation )
         
+        generation.reevalFitness( )
+        
         #Survival
         generation.survivalselection( )
         prnBase( cfg, i, generation )

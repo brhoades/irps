@@ -179,9 +179,8 @@ class gen:
                 ind.delete( )
             self.inds = kids
             
-    # Survival selection routine.
-    def survivalselection( self ):
-        if self.strat == COMMA:
+    def reevalFitness( self ):
+        if self.strat == PLUS:
             delprn( "Reevaluating Fitness\t", 2 )
         else:
             delprn( "Evaluating Fitness\t", 2 )
@@ -193,9 +192,12 @@ class gen:
         delprn( "0", 3 )
         
         for i in range(len(self.inds)):
-            ind.fitness( )
+            self.inds[i].fitness( )
             delprn( str(perStr( i/len(self.inds) )), 3 )
+
             
+    # Survival selection routine.
+    def survivalselection( self ):            
         delprn( "Survival\t\t", 2 )
 
         if self.survtype == TRUNCATION:

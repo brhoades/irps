@@ -69,6 +69,8 @@ class agent:
         for i in range(self.mem):
             self.mymoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
             self.tmoves.append( random.randint(moves.MINMOVE, moves.MAXMOVE) )
+            
+        self.payoffs = []
     
     
     # Our fitness, just an average of our payloads
@@ -87,7 +89,7 @@ class agent:
                     myres = self.run( )
                     self.upres( myres, ores, ( i > beforepayoff ) )
                     opp.upres( ores, myres, ( i > beforepayoff ) )
-            
+
         sum = 0
         for i in self.payoffs:
             sum += i
