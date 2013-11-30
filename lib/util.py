@@ -405,10 +405,6 @@ def perStr( dec, ceil=True, round=True ):
     else:
         return str(math.floor(dec*rnd))
 
-# Mutates a square if this returns >= 1  
-def mutateSq( mu, sigma ):
-    return( math.floor( math.fabs( random.gauss( mu, sigma ) ) ) )
-
 # Renders a header depending on options
 def renderHead( cfg ):
     print(''.join(["Run #/",cfg[MAIN][RUNS]]), end='')
