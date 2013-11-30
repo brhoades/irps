@@ -34,7 +34,8 @@ class gen:
         
         self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1
         
-        self.agent = cfg[AGENT]
+        self.agent = cfg[AGENT]        
+        self.main = cfg[MAIN]
         
         self.coefsp = float(self.cfg[AGENT][COEV_FIT_SAMPLE_PERCENT])
         
@@ -59,15 +60,6 @@ class gen:
                      "adjusted to 4.")
             self.agent[MEM] = 4
         
-        self.main = cfg[MAIN]
-        
-        #number of sequences for a fitness evaluation
-        self.seqs = int(cfg[MAIN][SEQRUNS])
-        if self.seqs < 3*cfg[AGENT][MEM]:
-            warn("number of agent sequences must be >=", (3*cfg[AGENT][MEM]), ", it will be " \
-                    "automatically adjusted.")
-            self.seqs = 3*cfg[AGENT][MEM]
-        
         #Determine the constant amount to remove each survival selection
         if self.strat == PLUS:
             if self.mu < self.lamb:
@@ -81,6 +73,14 @@ class gen:
             elif self.mu > self.lamb:
                 warn("population will decrease to zero.")
                 self.survivalamount = 0 #population dies
+        
+         #number of sequences for a fitness evaluation
+         self.seqs = int(cfg[MAIN][SEQRUNS])
+         if self.seqs < 3*cfg[AGENT][MEM]:
+             warn("number of agent sequences must be >=", (3*cfg[AGENT][MEM]), ", it will be " \
+                     "automatically adjusted.")
+            self.seqs = 3*cfg[AGENT][MEM]
+
         
         #Our internal counter for fitness evaluations
         self.fitevals = 0
