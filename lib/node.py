@@ -103,17 +103,14 @@ class node:
     # "Looks up" in our memory what our operator looks for, when we are a leaf
     def lookup( self ):
         type, index = self.operator
-        lu = None
         
         #Types could be "P" or could be "O". If it's "P" we look at our previous moves. If it's "O" we look
         #  at theirs.
         if type == srctype.OPPONENT:
-            lu = self.tree.agent.tmoves
-        else:
-            lu = self.tree.agent.mymoves
+            return self.tree.agent.tmoves[index]
+        
+        return self.tree.agent.mymoves[index]
 
-        return lu[index]
-    
     #Copies an operator over to our own operator using an internal register
     def copyOp( self, other ):
         if other.type == "winner":
