@@ -81,3 +81,16 @@ class payoffs:
     LOSS=-1
     TIE=0
     WIN=1
+
+OPS = [moves.ROCK, moves.SCISSORS, moves.PAPER]
+
+class victor_results:
+    P1 = 1
+    P2 = 2
+
+#Our victor lookup, using p1 as first key and p2 as second.
+#Rock is 0, so first tuple is rock as p1, then first res of first tuple is rockvrock
+#1 means p1 wins or tie, 2 p2
+VICTOR_LOOKUP_TABLE = ((1,2,1,),     #rockvrock, rockvpaper, rockvscissors
+                       (1,1,2,),     #papervrock, papervpaper, papervscissors
+                       (2,1,1,),)    #scissorsvrock, scissorsvpaper, scissorsvscissors

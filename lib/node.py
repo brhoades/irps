@@ -67,7 +67,7 @@ class node:
         cres = self.getCRes( )
 
         #return the LOSER, so the one that's not the victor
-        if util.victor(cres[0], cres[1]) == cres[0]:
+        if util.victor(cres[0], cres[1]) == victor_results.P1:
             return cres[1]
         
         return cres[0]

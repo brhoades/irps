@@ -7,31 +7,14 @@ import random, datetime, time, configparser, fileinput, argparse, re, sys, math,
 from const import *
 from collections import deque
 
-# Returns the winner of the two in a RPS contest
-def victor( m1, m2 ):
-    #Need to do this due to some type issues with reading the CSV
-    m1 = int(m1)
-    m2 = int(m2)
+# Returns the winner of the two in a RPS contest.
+#   Turned into a tuple table to save time.
+def victor( p1, p2 ):
+    res = VICTOR_LOOKUP_TABLE[p1][p2]
     
-    if m1 == m2:
-        return m1
-    
-    if m1 == moves.ROCK and m2 == moves.PAPER:
-        return m2
-    if m1 == moves.ROCK and m2 == moves.SCISSORS:
-        return m1
-    
-    if m1 == moves.PAPER and m2 == moves.ROCK:
-        return m1
-    if m1 == moves.PAPER and m2 == moves.SCISSORS:
-        return m2
-    
-    if m1 == moves.SCISSORS and m2 == moves.PAPER:
-        return m1
-    if m1 == moves.SCISSORS and m2 == moves.ROCK:
-        return m2
-     
-    raise TypeError( "Somehow I missed a combination.", tauriTran( m1 ), tauriTran( m2 ) )
+    if res == victor_results.P1:
+        return p1
+    return p2
 
 #Load our CSV into memory, parse it into our format, and then return a list
 #This CSV takes ages to parse, made it a "static" variable for huge time savings
@@ -140,7 +123,6 @@ def nlist( list, n, w=3, trailingNull=False ):
         list.append(-1)
         
     return list
-    
 
 #Fitness related
 
