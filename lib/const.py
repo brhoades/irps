@@ -20,6 +20,7 @@ MEM = "k"
 PAYOFF = "payoff"
 PARSIMONY_PRESSURE_COEFF = "ppcoeff"
 CSV_FILE = "csv"
+COEV_FIT_SAMPLE_PERCENT = "coevfsp"
 
 #main
 SEED = "seed"

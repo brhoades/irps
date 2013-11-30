@@ -74,11 +74,11 @@ class gen:
                 warn("population will decrease to zero.")
                 self.survivalamount = 0 #population dies
         
-         #number of sequences for a fitness evaluation
-         self.seqs = int(cfg[MAIN][SEQRUNS])
-         if self.seqs < 3*cfg[AGENT][MEM]:
-             warn("number of agent sequences must be >=", (3*cfg[AGENT][MEM]), ", it will be " \
-                     "automatically adjusted.")
+        #number of sequences for a fitness evaluation
+        self.seqs = int(cfg[MAIN][SEQRUNS])
+        if self.seqs < 3*cfg[AGENT][MEM]:
+            warn("number of agent sequences must be >=", (3*cfg[AGENT][MEM]), ", it will be " \
+                    "automatically adjusted.")
             self.seqs = 3*cfg[AGENT][MEM]
 
         
