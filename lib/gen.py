@@ -81,7 +81,6 @@ class gen:
                     "automatically adjusted.")
             self.seqs = 3*cfg[AGENT][MEM]
 
-        
         #Our internal counter for fitness evaluations
         self.fitevals = 0
         

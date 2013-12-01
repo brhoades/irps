@@ -27,9 +27,9 @@ class tree:
         self.depth = 0
         
         #We do grow, randomly if "half and half"
-        if ( self.meth == HALFANDHALF and util.flip( ) ) or self.meth == GROW:
+        if( self.meth == HALFANDHALF and util.flip( ) ) or self.meth == GROW:
             self.populate( GROW )
-        else: #Otherwise we do full initialization
+        elif self.meth == HALFANDHALF or self.meth == FULL: #Otherwise we do full initialization
             self.populate( FULL )
             
     def __str__( self ):
@@ -126,6 +126,17 @@ class tree:
                 return
         else:
             return nod.depth
+
+    # Read in a preorder 
+    def read( self, fn ):
+        fh = open( fn, 'r' )
+        
+        preorderstr = fh.readline( )
+        porder = preorderstr.split(' ')
+        
+    def readpreorder( self, part ):
+        
+        
                 
     #Derefs everything
     def delete( self ):

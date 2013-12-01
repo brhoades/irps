@@ -28,11 +28,13 @@ class agent:
         # Create some random noise for the first sequence
         self.mymoves = deque( [random.randint(moves.MINMOVE, moves.MAXMOVE) for i in range(self.mem)], self.mem )
                 
-        if not "copy" in args:
+        if not "copy" in args and not "read" in args:
             self.tree = tree( self, int(self.gen.agent[DEPTH]), self.gen.method )
-        else:
+        elif "copy" in args:
             self.tree = tree( self, int(self.gen.agent[DEPTH]), None )
             self.tree.copy( args["copy"].tree )
+        elif "read" in args:
+            self.tree = tree( self, 0, None )
         
         self.fit = 0
         
@@ -100,7 +102,7 @@ class agent:
     def serialize( self ):
         return self.preorder( self.tree.root )
 
-    #Outputs our nodes in preorder
+    # Outputs our nodes in preorder
     def preorder( self, cur ):
         ret = ""
         
@@ -118,7 +120,7 @@ class agent:
         
         return ret
     
-    #Mutate oursevles if we have a chance
+    # Mutate oursevles if we have a chance
     def mutate( self ):
         if not util.roll( self.gen.mutaterate ):
             return
@@ -134,7 +136,7 @@ class agent:
         point.delete( )
         
         #Fitness is calculated in recombine
-
+        
     def delete( self ):
         self.gen = None
         self.tree.delete( )
