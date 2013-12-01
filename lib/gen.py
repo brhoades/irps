@@ -32,7 +32,7 @@ class gen:
         
         self.mutaterate = float(cfg[MUTATE][MUTATION_RATE])
         
-        self.overselnum = float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1
+        self.overselnum = floor(float(self.cfg[PARSEL][OVERSEL_PERCENT])*self.mu*-1)
         
         self.agent = cfg[AGENT]        
         self.main = cfg[MAIN]
@@ -126,19 +126,20 @@ class gen:
                 delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
         elif self.partype == OVER_SELECTION:
             sortedinds = sorted(self.inds, key=lambda ind: ind.fit)
-            #Choose top c% individuals
+            #Choose top c% individuals 80% of the time
             top = sortedinds[self.overselnum:]
             bot = sortedinds[:self.overselnum]
+            pairsneeded = floor(self.lamb/2)
             
-            for i in range(0,floor(self.lamb/2)):
+            for i in range(0,pairsneeded):
                 pair = []
                 for j in range(0,2):
                     if roll(.8):
-                        pair.append(top[random.randint(0,len(top))])
+                        pair.append(random.sample(top, 1)[0])
                     else:
-                        pair.append(bot[random.randint(0,len(bot))])
+                        pair.append(random.sample(bot, 1)[0])
                 pairs.append(pair)
-                delprn( str(perStr( i/floor(self.lamb/2) )), 3 )
+                delprn( str(perStr( len(pairs)/pairsneeded )), 3 )
         return pairs
             
     # Breed and mix
