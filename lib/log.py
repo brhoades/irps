@@ -159,7 +159,7 @@ class log:
         self.bestFinish( best )
 
         self.res.write( "\nRandom GP Performance\n" )
-        self.res.write( "Global best's gen #: " + str(best.gennum) )
+        self.res.write( "Global best's gen #: " + str(best.gennum) + "\n" )
 
         #Clear old payoffs
         best.payoffs = []
@@ -183,7 +183,7 @@ class log:
         for i in best.payoffs:
             avg += i
         avg /= len(best.payoffs)
-        self.res.write( str(avg) )
+        self.res.write( str(avg) + "\n" )
 
         self.csv.write( "\n\n" + "Global Best Gen #,avgabsfit,lastwinfit,csvfit,random fit" + "\n" )
         self.csv.write( str(best.gennum) + "," + str(best.fit) + "," + str(best.fits[0]) + "," + str(best.fits[1]) + "," + str(avg) + "\n" )
