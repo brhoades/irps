@@ -29,13 +29,20 @@ def main():
     util.loadCSV(cfg[AGENT][CSV_FILE])
     
     lg = log( cfg, cseed, util.gcfg( ) )
-    best = None
     util.renderHead( cfg )
+
+    best = None
+
     for i in range( 0, int(cfg[MAIN][RUNS]) ):
         lg.sep( i )
-        eagt=run(cfg, i, lg)
-        if best == None or eagt.fit > best.fit:
-            best = eagt
+
+        nbest = run(cfg, i, lg)
+
+        #Determine if our new potential best is better,
+        #  this just uses the average of the two fitness values versus the bad opponents
+        if best == None or nbest.fit > best.fit:
+            best = nbest
+
     lg.best(best)
     lg.absBestFinish(cfg, best)
     lg.wrapUp(best)
