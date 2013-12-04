@@ -1,0 +1,64 @@
+Result Log
+Config File: cfg/default.cfg
+Seed: 1386190570.831864
+Git Hash: 73a1f200869a73b5265a65aa169e5a70a3ee61d5
+  Commit Date: Wed Dec 4 14:52:42 2013 -0600 (4 minutes ago)
+  Author: Billy Rhoades <billyarhoades@gmail.com>
+  Change Message: Removed old config files, added a line break.
+Main Parameters:
+  seed: 
+  l: 30
+  runs: 2
+Agent Parameters:
+  k: 5
+  d: 7
+  coevfsp: .05
+  csv: opponent1.csv
+  payoff: .8,1,0,0,.8,1,1,0,.8
+  ppcoeff: 0.05
+Generation Parameters:
+  mu: 500
+  lamb: 50
+Initialization Parameters:
+  method: halfandhalf
+Parent Selection Parameters:
+  type: 1
+  c: 0.32
+Mutation Parameters:
+  chance: 0.025
+Survival Selection Parameters:
+  type: 2
+  k: 20
+  strat: 1
+Termination Parameters:
+  type: 0
+  fitevals: 1000
+  j: 10
+
+Run 1
+500	0.6044601336675017	0.8000000000000004
+1050	0.6117345558340297	0.8736842105263158
+
+Absolute Fitness
+0.8000000000000003
+0.5263157894736842
+=SPACER=
+
+Run 2
+500	0.6009421888053468	0.8894736842105262
+1050	0.6130208827624619	0.8842105263157896
+
+Absolute Fitness
+0.8000000000000003
+0.6
+=SPACER=
+
+Tree with the Global Best Fitness
+
+Absolute Fitness
+0.7263157894736845
+0.6736842105263159
+
+Random GP Performance
+Global best's gen #: 0
+0.5884210526315812

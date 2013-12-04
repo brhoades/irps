@@ -68,6 +68,7 @@ HALFANDHALF = "halfandhalf"
 GIT_LOG_HEADERS = "logh"
 RESULT_LOG_FILE = "result"
 SOLUTION_LOG_FILE = "solution"
+CSV_FILE = "csv"
 
 class moves:
     MINMOVE=0
