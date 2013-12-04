@@ -126,17 +126,6 @@ class tree:
                 return
         else:
             return nod.depth
-
-    # Read in a preorder 
-    def read( self, fn ):
-        fh = open( fn, 'r' )
-        
-        preorderstr = fh.readline( )
-        porder = preorderstr.split(' ')
-        
-    def readpreorder( self, part ):
-        
-        
                 
     #Derefs everything
     def delete( self ):

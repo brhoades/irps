@@ -38,7 +38,7 @@ class agent:
         
         self.fit = 0
         
-    # Run our GP and return our choice. We do our own memory except for the payoff / tmoves, which is done by
+    # Run our GP and return our choice. We do not touch our memory so it's easier to pass mymoves to them payoff / tmoves, which is done by
     #   upres.
     def run( self, tmoves ):
         res = -2

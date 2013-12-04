@@ -9,6 +9,7 @@ sys.path.append( os.path.abspath("lib") )
 
 #load our custom libraries
 import util
+from log import log
 from run import run
 from agent import agent
 from const import *
@@ -27,7 +28,7 @@ def main():
     
     util.loadCSV(cfg[AGENT][CSV_FILE])
     
-    lg = util.log( cfg, cseed, util.gcfg( ) )
+    lg = log( cfg, cseed, util.gcfg( ) )
     best = None
     util.renderHead( cfg )
     for i in range( 0, int(cfg[MAIN][RUNS]) ):
@@ -36,6 +37,7 @@ def main():
         if best == None or eagt.fit > best.fit:
             best = eagt
     lg.best(best)
+    lg.absBestFinish(cfg, best)
     lg.wrapUp(best)
     
     print("\n")
