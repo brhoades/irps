@@ -11,12 +11,18 @@ class log:
     def __init__( self, fcfg, gseed, cfgf):
         cfg = fcfg[LOG]
         self.cfgf = cfgf
+
+        #Make our CSV lst, for storing absolute fitnesses
+        self.csvdata = []
+
+        #Filenames
         self.rfn = cfg[RESULT_LOG_FILE].rsplit('/')
         self.sfn = cfg[SOLUTION_LOG_FILE].rsplit('/')
         self.cfn = cfg[CSV_FILE].rsplit('/')
 
         self.processDirs( )
 
+        #Backups of original filenames for later moving
         self.fullRes = self.rfn
         self.fullSol = self.sfn
         self.fullCSV = self.cfn
@@ -24,6 +30,7 @@ class log:
         print("Writing to:", self.rfn, "and", self.sfn, "you have 3 seconds to cancel.")
         time.sleep(3)
 
+        #Creating the handles
         self.res = open( self.rfn, 'w' )
         self.sol = open( self.sfn, 'w' )
         self.csv = open( self.cfn, 'w' )
@@ -76,20 +83,23 @@ class log:
     # Seperates our result log file with pretty run numbers.
     def sep( self, run ):
         self.res.write( ''.join( [ "\n", "Run ", str(run+1), "\n" ] ) )
+        self.csv.write( ''.join( [ "Run ", str(run+1), ",,", "\n" ] ) )
         self.res.flush( )
 
+    # Does an individual entry @ # fitness evals in the CSV and reslog
     def entry( self, gen ):
+        #Results log has a prettier version
         self.res.write( ''.join( [ str(gen.fitevals), "\t", str(gen.average( )), "\t", str(gen.best( ).fit), "\n" ] ) )
 
-    # Print our absolute fitness for our bests
-    # basically reverse engineering fitness + logging + run
-    def spacer( self, best ):
-        fits = []
-        regfit = best.fit
+        #Just CSV data for the CSV
+        self.csv.write( ''.join( [ str(gen.fitevals), ",", str(gen.average( )), ",", str(gen.best( ).fit), "\n" ] ) )
 
+    # Space out our result file
+    def spacer( self ):
         self.res.write( "=SPACER=\n" )
 
     # Print out stuff about our local best's absolute fitness.
+    #   Reverse engineers our fitness evaluation
     def bestFinish( self, best ):
         self.res.write( "\nAbsolute Fitness\n" )
 
@@ -124,9 +134,12 @@ class log:
 
         self.res.write( str(fits[0]) + "\n" + str(fits[1]) + "\n" )
 
+        #For later use, write this stuff to our CSV
+        self.csvdata.append( [best.gen.num, str(fits[0]), str(fits[1])] )
+
     # Print out stuff about our global best's absolute fitness
     def absBestFinish( self, cfg, best ):
-        self.res.write( "\n Tree with the Global Best Fitness\n" )
+        self.res.write( "\nTree with the Global Best Fitness\n" )
 
         #Mock container generation
         generation = gen( cfg )
@@ -160,8 +173,12 @@ class log:
         for i in best.payoffs:
             avg += i
         avg /= len(best.payoffs)
-        self.res.write( "Average 30 GP Performance: " )
         self.res.write( str(avg) )
+
+    # Write our absolute fitness now in our CSV
+    def absFitnessWrite( self ):
+        for line in self.csvdata:
+            self.csv.write( str(line[0]) + "," + str(line[1]) + "," + str(line[2]) + "\n" )
 
     # Do our initial variable sub
     def processDirs( self ):
@@ -182,6 +199,8 @@ class log:
 
     # Move any files with new names, organize everything properly
     def wrapUp( self, best ):
+        self.absFitnessWrite( )
+
         self.res.close( )
         self.sol.close( )
         self.csv.close( )

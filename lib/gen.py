@@ -12,11 +12,13 @@ from math import floor
 import random, tree
 
 class gen:
-    def __init__( self, cfg ):
+    def __init__( self, cfg, num=-1 ):
         #Our individuals
         self.inds = []
         
         self.cfg = cfg
+
+        self.num = num+1
         
         self.mu = int(cfg[GENERATION][MU])
         self.lamb = int(cfg[GENERATION][LAMBDA])

@@ -18,7 +18,7 @@ def run( cfg, i, lg ):
     cfg[TERMINATE][NO_CHANGE_FITNESS] = int(cfg[TERMINATE][NO_CHANGE_FITNESS])
     cfg[TERMINATE][FITEVALS] = int(cfg[TERMINATE][FITEVALS])
         
-    generation = gen( cfg )
+    generation = gen( cfg, i )
         
     prnBase( cfg, i, generation )
         
@@ -31,8 +31,7 @@ def run( cfg, i, lg ):
         
         #Recomb + Mutation
         generation.recombination( )
-        #prnBase( cfg, i, generation )
-        
+
         generation.reevalFitness( )
         
         #Survival
@@ -43,7 +42,8 @@ def run( cfg, i, lg ):
     
     #delicately extract the best from the generation
     best = generation.best( )
-    lg.spacer( best )
+    lg.bestFinish( best )
+    lg.spacer( )
 
     generation.delete( best )
     best.gen = None
