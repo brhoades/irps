@@ -100,10 +100,11 @@ class log:
 
     # Print out stuff about our local best's absolute fitness.
     #   Reverse engineers our fitness evaluation
+    #   This also permanently changes the fitness to the average between the two opp types
+    #   and stores an array of individual values.
     def bestFinish( self, best ):
         self.res.write( "\nAbsolute Fitness\n" )
 
-        regfit = best.fit
         fits = []
 
         for i in range(0,2):
@@ -130,12 +131,20 @@ class log:
             sum /= len(best.payoffs)
 
             fits.append( sum )
-        best.fit = regfit
 
         self.res.write( str(fits[0]) + "\n" + str(fits[1]) + "\n" )
 
+        best.fit = 0
+        best.fits = fits
+        for fit in best.fits:
+            best.fit += fit
+        best.fit /= len(best.fits)
+
         #For later use, write this stuff to our CSV
         self.csvdata.append( [best.gen.num, str(fits[0]), str(fits[1])] )
+
+        #Store our gen number so it can be referenced after the generation is deleted
+        best.gennum = best.gen.num
 
     # Print out stuff about our global best's absolute fitness
     def absBestFinish( self, cfg, best ):
@@ -150,6 +159,7 @@ class log:
         self.bestFinish( best )
 
         self.res.write( "\nRandom GP Performance\n" )
+        self.res.write( "Global best's gen #: " + str(best.gennum) )
 
         #Clear old payoffs
         best.payoffs = []
@@ -174,6 +184,9 @@ class log:
             avg += i
         avg /= len(best.payoffs)
         self.res.write( str(avg) )
+
+        self.csv.write( "\n\n" + "Global Best Gen #,avgabsfit,lastwinfit,csvfit,random fit" + "\n" )
+        self.csv.write( str(best.gennum) + "," + str(best.fit) + "," + str(best.fits[0]) + "," + str(best.fits[1]) + "," + str(avg) + "\n" )
 
     # Write our absolute fitness now in our CSV
     def absFitnessWrite( self ):

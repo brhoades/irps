@@ -25,19 +25,24 @@ def main():
     
     random.seed(cseed)
     
-    if cfg[MAIN][OPP] != "0":
-        util.loadCSV(cfg[MAIN][OPP])
+    util.loadCSV(cfg[MAIN][OPP])
     
-    lg = util.log( cfg, cseed, util.gcfg( ) )
-    best = None
     util.renderHead( cfg )
+
+    best = None
+
     for i in range( 0, int(cfg[MAIN][RUNS]) ):
         lg.sep( i )
-        eagt=run(cfg, i, lg)
-        if best == None or eagt.fit > best.fit:
-            best = eagt
-        lg.spacer( )
+        
+        nbest = run(cfg, i, lg)
+
+        #Determine if our new potential best is better,
+        #  this just uses the average of the two fitness values versus the bad opponents
+        if best == None or nbest.fit > best.fit:
+            best = nbest
+
     lg.best(best)
+    lg.absBestFinish(cfg, best)
     lg.wrapUp(best)
     
     print("\n")
