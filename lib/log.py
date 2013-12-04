@@ -159,7 +159,7 @@ class log:
         self.bestFinish( best )
 
         self.res.write( "\nRandom GP Performance\n" )
-        self.res.write( "Global best's gen #: " + str(best.gennum) + "\n" )
+        self.res.write( "Global best's gen #: " + str(best.gennum+1) + "\n" )
 
         #Clear old payoffs
         best.payoffs = []
