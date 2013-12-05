@@ -13,7 +13,6 @@ from run import run
 from agent import agent
 from const import *
 
-
 def main():
     cfg = util.readConfig(util.gcfg( ))
     
