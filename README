@@ -2,7 +2,7 @@ Billy Rhoades (12352623) <bjrq48@mst.edu>
 Evolutionary Computation
 Class: CS348 Assignment 2c
 
-This program has been throughly tested on Linux on both Python 3.2 and Python 3.3.
+This program has been throughly tested on Linux in Python 3.3.
 
 ****It is known not to work on Python 2.6 and Python 2.7.****
 
@@ -23,3 +23,9 @@ Example:
     python3 main.py -c cfg/default.cfg
 
 Each config is named appropriately for the run they were used for and are located in cfg/
+
+====
+
+The EA-GP used to get the AS2b results can be found by checking out the branch as2b.
+If the included git repository cannot be used correctly, please clone a fresh one
+at: https://github.com/brhoades/.
