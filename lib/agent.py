@@ -68,7 +68,6 @@ class agent:
     # Our fitness, just an average of our payloads
     #   However we need to run our competition a few times
     def fitness( self ):
-        #FIXME: hacked in
         otype = self.gen.cfg[MAIN][OPP] 
         
         for j in range(0,self.gen.seqs):
