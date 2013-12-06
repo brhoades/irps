@@ -5,6 +5,7 @@
 
 import random, datetime, time, configparser, fileinput, argparse, re, sys, math, subprocess, shutil, os, copy
 from const import *
+from collections import deque
 
 # Returns the winner of the two in a RPS contest
 def victor( m1, m2 ):

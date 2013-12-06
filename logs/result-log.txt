@@ -1,10 +1,10 @@
 Result Log
 Config File: cfg/default.cfg
-Seed: 1386288019.491436
-Git Hash: daa7b70252a35d5f48ac5124319560da9aacbd8d
-  Commit Date: Thu Dec 5 17:54:55 2013 -0600 (5 minutes ago)
+Seed: 1386288195.73302
+Git Hash: 0c3d42fb4956d3772d04543f6215b6f754d9afb0
+  Commit Date: Thu Dec 5 18:00:41 2013 -0600 (3 minutes ago)
   Author: Billy Rhoades <billyarhoades@gmail.com>
-  Change Message: Minor compilation fixes.
+  Change Message: Added missing log call.
 Main Parameters:
   seed: 
   l: 30
@@ -35,9 +35,22 @@ Termination Parameters:
   j: 10
 
 Run 1
-500	0.599466666666667	0.9533333333333335
-1000	0.6640933333333338	0.9533333333333335
-1500	0.6862000000000015	0.9533333333333335
-2000	0.6982133333333354	0.9533333333333335
+500	0.5965733333333332	0.8333333333333335
+1000	0.6622133333333341	0.8333333333333336
+1500	0.6865666666666681	0.8333333333333336
+2000	0.7021066666666678	0.9000000000000002
 
 Absolute Fitness
+0.42857142857142855
+0.8190476190476191
+=SPACER=
+
+Tree with the Global Best Fitness
+
+Absolute Fitness
+0.419047619047619
+0.8190476190476191
+
+Random GP Performance
+Global best's gen #: 1
+0.5809523809523834

@@ -115,12 +115,12 @@ class log:
             for j in range(0, best.gen.seqs):
                 ores = -2
                 if i == 0:
-                    ores = victor( tmoves[0], best.mymoves[0] )
+                    ores = victor( best.tmoves[0], best.mymoves[0] )
                 else:
-                    ores = CSVAI( tmoves, best.mymoves )
+                    ores = CSVAI( best.tmoves, best.mymoves )
 
                 tmoves.appendleft( ores )
-                myres = best.run( tmoves )
+                myres = best.run( )
 
                 if j > beforepayoff:
                     best.upres( myres, ores )
@@ -172,8 +172,8 @@ class log:
             beforepayoff = best.mem*2
             for j in range(0,generation.seqs):
                 tmoves = opp.mymoves
-                oppres = opp.run( best.mymoves )
-                myres = best.run( opp.mymoves )
+                oppres = opp.run( )
+                myres = best.run( )
 
                 if j > beforepayoff:
                     best.upres( myres, oppres )
