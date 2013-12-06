@@ -79,6 +79,7 @@ class agent:
                     if i > beforepayoff:
                         self.upres( myres, ores )
                         opp.upres( ores, myres )
+                self.gen.fitevals += 1
 
         sum = 0
         for i in self.payoffs:
@@ -86,8 +87,6 @@ class agent:
         self.fit = sum/len(self.payoffs)
 
         self.penalize( )
-
-        self.gen.fitevals += 1
         
     # Penalizes our fitness based on tree size
     def penalize( self ):
