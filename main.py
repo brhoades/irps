@@ -12,6 +12,7 @@ import util
 from run import run
 from agent import agent
 from const import *
+from log import *
 
 def main():
     cfg = util.readConfig(util.gcfg( ))
@@ -26,6 +27,7 @@ def main():
     
     util.loadCSV(cfg[MAIN][OPP])
     
+    lg = log( cfg, cseed, util.gcfg( ) )
     util.renderHead( cfg )
 
     best = None
