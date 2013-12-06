@@ -25,7 +25,7 @@ def main():
     
     random.seed(cseed)
     
-    util.loadCSV(cfg[MAIN][OPP])
+    util.loadCSV('opponent1.csv')
     
     lg = log( cfg, cseed, util.gcfg( ) )
     util.renderHead( cfg )
