@@ -41,6 +41,8 @@ def main():
         #Determine if our new potential best is better,
         #  this just uses the average of the two fitness values versus the bad opponents
         if best == None or nbest.fit > best.fit:
+            if best != None:
+                best.delete( )
             best = nbest
 
     lg.best(best)

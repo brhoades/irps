@@ -134,7 +134,6 @@ class log:
 
         self.res.write( str(fits[0]) + "\n" + str(fits[1]) + "\n" )
 
-        best.fit = 0
         best.fits = fits
         for fit in best.fits:
             best.fit += fit
@@ -156,10 +155,8 @@ class log:
         #Avoiding errors
         best.gen = generation
 
-        self.bestFinish( best )
-
         self.res.write( "\nRandom GP Performance\n" )
-        self.res.write( "Global best's gen #: " + str(best.gennum+1) + "\n" )
+        self.res.write( "Global best's gen #: " + str(best.gennum) + "\n" )
 
         #Clear old payoffs
         best.payoffs = []
@@ -183,13 +180,14 @@ class log:
         for i in best.payoffs:
             avg += i
         avg /= len(best.payoffs)
-        self.res.write( str(avg) + "\n" )
+        self.res.write( "Random fit: " + str(avg) + "\n" )
 
-        self.csv.write( "\n\n" + "Global Best Gen #,avgabsfit,lastwinfit,csvfit,random fit" + "\n" )
+        self.csv.write( "\n\n" + "Global Best Gen #,avgabsfit,lastwinfit,csv,random fit" + "\n" )
         self.csv.write( str(best.gennum) + "," + str(best.fit) + "," + str(best.fits[0]) + "," + str(best.fits[1]) + "," + str(avg) + "\n" )
 
     # Write our absolute fitness now in our CSV
     def absFitnessWrite( self ):
+        self.csv.write( "\n\nAbsolute Fitnesses per Generation\nGen#,lastwinner,csv\n" )
         for line in self.csvdata:
             self.csv.write( str(line[0]) + "," + str(line[1]) + "," + str(line[2]) + "\n" )
 
